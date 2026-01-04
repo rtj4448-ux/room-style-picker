@@ -1,73 +1,319 @@
-// Scroll to tool from buttons
-const startBtn = document.getElementById("startBtn");
-const heroBtn = document.getElementById("heroBtn");
-const toolSection = document.getElementById("tool");
+*{ box-sizing:border-box; }
 
-function goToTool(){
-  toolSection?.scrollIntoView({ behavior: "smooth" });
+:root{
+  --bg:#ffffff;
+  --text:#0f172a;
+  --muted:#64748b;
+  --border:#e2e8f0;
+  --shadow: 0 12px 30px rgba(2,6,23,0.08);
+  --primary:#0f172a;
+  --primaryHover:#111c33;
+  --secondary:#eef2ff;
+  --radius:18px;
+  --container: 1100px;
 }
 
-startBtn?.addEventListener("click", goToTool);
-heroBtn?.addEventListener("click", goToTool);
+html,body{ height:100%; }
 
-// Required alert button
-const visitBtn = document.getElementById("visitBtn");
-visitBtn?.addEventListener("click", () => {
-  alert("شكراً لزيارة موقعي!");
-});
-
-// Fake login (optional)
-const loginForm = document.getElementById("loginForm");
-const userNameInput = document.getElementById("userName");
-const welcomeMsg = document.getElementById("welcomeMsg");
-
-const storedName = localStorage.getItem("userName");
-if (storedName && welcomeMsg) {
-  welcomeMsg.textContent = `مرحبًا ${storedName} 👋`;
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  color:var(--text);
+  background:var(--bg);
+  line-height:1.7;
 }
 
-loginForm?.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const name = userNameInput.value.trim();
-  if (!name) return;
-
-  localStorage.setItem("userName", name);
-  welcomeMsg.textContent = `هلا ${name}! تقدري تبدأي الاقتراح تحت ✨`;
-  goToTool();
-});
-
-// Suggestion tool
-const suggestBtn = document.getElementById("suggestBtn");
-const roomType = document.getElementById("roomType");
-const style = document.getElementById("style");
-const result = document.getElementById("result");
-
-const suggestions = {
-  modern:  { name: "مودرن هادي", colors: ["#F8FAFC", "#111827", "#0f172a"], items: ["كنبة بسيطة", "طاولة قهوة", "إضاءة أرضية"] },
-  minimal: { name: "مينيمال نظيف", colors: ["#FFFFFF", "#E2E8F0", "#0f172a"], items: ["قطع قليلة", "خزانة تخزين", "مرايا"] },
-  boho:    { name: "بوهو دافئ", colors: ["#F5EDE3", "#B45309", "#065F46"], items: ["سجاد", "نباتات", "وسائد"] },
-  classic: { name: "كلاسيك أنيق", colors: ["#FFF7ED", "#7C2D12", "#0f172a"], items: ["ستارة", "طاولة جانبية", "لوحات"] }
-};
-
-const roomNames = {
-  bedroom: "غرفة نوم",
-  living: "غرفة معيشة",
-  office: "مكتب"
-};
-
-function dots(colors){
-  return colors.map(c =>
-    `<span style="display:inline-block;width:18px;height:18px;border-radius:6px;background:${c};border:1px solid #e2e8f0;margin-left:6px;"></span>`
-  ).join("");
+/* =========================
+   NAVBAR
+========================= */
+.nav{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#fff;
+  border-bottom:1px solid var(--border);
 }
 
-suggestBtn?.addEventListener("click", () => {
-  const s = suggestions[style.value];
-  const r = roomNames[roomType.value];
+.nav__inner{
+  width:min(var(--container), 92%);
+  margin:0 auto;
+  padding:14px 0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
 
-  result.innerHTML = `
-    <strong>اقتراحك: ${s.name} لـ ${r}</strong><br/>
-    <div style="margin-top:10px;">الألوان: ${dots(s.colors)}</div>
-    <div style="margin-top:10px;">عناصر مقترحة: ${s.items.join("، ")}</div>
-  `;
-});
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:900;
+}
+
+.brand__logo{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  background:var(--primary);
+  color:#fff;
+}
+
+.brand__name{ font-weight:900; }
+
+.nav__links{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  gap:18px;
+}
+
+.nav__links a{
+  text-decoration:none;
+  color:var(--text);
+  font-weight:800;
+  font-size:0.95rem;
+}
+
+.nav__links a:hover{ opacity:0.8; }
+
+.nav__actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.nav__login{
+  text-decoration:none;
+  color:var(--text);
+  font-weight:800;
+  opacity:0.9;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+.container{
+  width:min(var(--container), 92%);
+  margin:0 auto;
+  padding:26px 0 40px;
+}
+
+.section{ margin-top:34px; }
+.section__title{
+  margin:0 0 8px;
+  font-size:22px;
+}
+
+.muted{
+  color:var(--muted);
+  margin:0 0 14px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn{
+  border:0;
+  border-radius:999px;
+  padding:12px 18px;
+  cursor:pointer;
+  font-weight:900;
+  font-size:1rem;
+}
+
+.btn--primary{
+  background:var(--primary);
+  color:#fff;
+  box-shadow: var(--shadow);
+}
+.btn--primary:hover{ background:var(--primaryHover); }
+
+.btn--secondary{
+  background:var(--secondary);
+  color:var(--primary);
+  border:1px solid var(--border);
+}
+
+.btn--big{ padding:14px 26px; }
+
+/* =========================
+   HERO (header)
+   Background Image + Overlay
+========================= */
+.hero{
+  position: relative;
+  text-align:center;
+  padding: 90px 14px;
+  border-radius: 22px;
+  overflow: hidden;
+  color: #fff;
+
+  background-image: url("images/hero.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  box-shadow: var(--shadow);
+}
+
+/* طبقة شفافة عشان النص يوضح */
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(
+    180deg,
+    rgba(2,6,23,0.55),
+    rgba(2,6,23,0.35)
+  );
+}
+
+/* نخلي محتوى الهيرو فوق الطبقة */
+.hero > *{
+  position: relative;
+  z-index: 1;
+}
+
+.hero__title{
+  font-size: 48px;
+  margin: 0 0 10px;
+  letter-spacing: -0.5px;
+}
+
+.hero__subtitle{
+  margin: 0 auto 18px;
+  max-width: 720px;
+  color: rgba(255,255,255,0.9);
+  font-size: 1.05rem;
+}
+
+/* =========================
+   CARDS (Features)
+========================= */
+.cards{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:18px;
+}
+
+.card{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  background:#fff;
+  box-shadow: 0 8px 18px rgba(2,6,23,0.05);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover{
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.card__img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  display:block;
+}
+
+.card__title{
+  margin:14px 14px 6px;
+  font-size:18px;
+  color: var(--text);
+}
+
+.card__text{
+  margin:0 14px 16px;
+  color:var(--muted);
+  font-size:0.95rem;
+}
+
+/* =========================
+   LOGIN BOX (Optional)
+========================= */
+.login__box{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px;
+  background:#fff;
+  box-shadow: 0 8px 18px rgba(2,6,23,0.05);
+}
+
+/* =========================
+   FORMS
+========================= */
+.form label{
+  font-weight:900;
+  display:block;
+  margin-top:10px;
+  margin-bottom:6px;
+  color: var(--text);
+}
+
+input, select{
+  width:100%;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:#fff;
+  font-size:1rem;
+}
+
+/* =========================
+   TOOL
+========================= */
+.tool__grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:14px;
+  margin-bottom:12px;
+}
+
+.result{
+  margin-top:14px;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px;
+  background:#fff;
+}
+
+.skills{
+  margin:8px 18px 0 0;
+}
+
+/* =========================
+   FOOTER
+========================= */
+.footer{
+  margin-top:40px;
+  border-top:1px solid var(--border);
+  padding-top:20px;
+}
+
+.footer__inner{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:18px;
+}
+.footer__title{ margin:0 0 8px; }
+.footer__link{
+  color:var(--primary);
+  font-weight:900;
+  text-decoration:none;
+}
+.footer__link:hover{ text-decoration:underline; }
+@media (max-width: 600px){
+  body{ background:#eef7ff; }      /* شرط المتطلبات */
+  .nav__links{ display:none; }
+  .hero{ padding: 70px 12px; }
+  .hero__title{ font-size: 30px; }
+  .cards{ grid-template-columns: 1fr; }
+  .tool__grid{ grid-template-columns: 1fr; }
+  .footer__inner{ flex-direction: column; }
+}
