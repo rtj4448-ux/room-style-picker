@@ -49,4 +49,100 @@
         <article class="card">
           <img class="card__img" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=60" alt="تخطيط غرفة" />
           <h3 class="card__title">Room planner</h3>
-          <p
+          <p class="card__text">اقتراح توزيع أثاث مناسب لمساحة غرفتك.</p>
+        </article>
+
+        <article class="card">
+          <img class="card__img" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60" alt="ألوان" />
+          <h3 class="card__title">Color palette</h3>
+          <p class="card__text">لوحة ألوان جاهزة تناسب الستايل.</p>
+        </article>
+
+        <article class="card">
+          <img class="card__img" src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=1200&q=60" alt="أثاث" />
+          <h3 class="card__title">Furniture picks</h3>
+          <p class="card__text">قائمة عناصر أساسية + لمسات ديكور.</p>
+        </article>
+
+        <article class="card">
+          <img class="card__img" src="https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=1200&q=60" alt="ديكور" />
+          <h3 class="card__title">DIY decor</h3>
+          <p class="card__text">اقتراحات بسيطة تعطي “ستايل” سريع.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- LOGIN (اختياري شكلي) -->
+    <section class="section login" id="login" aria-label="تسجيل الدخول">
+      <div class="login__box">
+        <h2 class="section__title">تسجيل دخول</h2>
+        <p class="muted">اكتبي اسمك عشان نحفظ تفضيلاتك.</p>
+
+        <form id="loginForm" class="form">
+          <label for="userName">اسمك</label>
+          <input id="userName" type="text" placeholder="مثال: رتاجي" required />
+          <button class="btn btn--secondary" type="submit">دخول</button>
+        </form>
+
+        <p id="welcomeMsg" class="muted"></p>
+      </div>
+    </section>
+
+    <!-- TOOL (section) -->
+    <section class="section tool" id="tool" aria-label="أداة الاقتراح">
+      <h2 class="section__title">اقتراح سريع</h2>
+      <p class="muted">اختاري الخيارات واضغطي “اقترح”.</p>
+
+      <div class="tool__grid">
+        <div>
+          <label for="roomType">نوع الغرفة</label>
+          <select id="roomType">
+            <option value="bedroom">غرفة نوم</option>
+            <option value="living">غرفة معيشة</option>
+            <option value="office">مكتب</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="style">الستايل</label>
+          <select id="style">
+            <option value="modern">مودرن</option>
+            <option value="minimal">مينيمال</option>
+            <option value="boho">بوهو</option>
+            <option value="classic">كلاسيك</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn btn--primary" id="suggestBtn" type="button">اقترح لي</button>
+      <div id="result" class="result" aria-live="polite"></div>
+
+      <h3 class="section__title" style="margin-top:18px;">المهارات اللي تعلمتها</h3>
+      <ul class="skills">
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+      </ul>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer" id="contact" aria-label="التواصل">
+      <div class="footer__inner">
+        <div>
+          <h2 class="footer__title">تواصل</h2>
+          <a class="footer__link" href="mailto:yourname@example.com">راسليني على البريد</a>
+        </div>
+
+        <div class="footer__cta">
+          <p class="muted">قل مرحباً!</p>
+          <!-- شرط المتطلبات: alert -->
+          <button class="btn btn--secondary" id="visitBtn" type="button">لزيارة موقعي!</button>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>
