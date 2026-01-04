@@ -4,87 +4,95 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Room Style Picker</title>
-  <link rel="stylesheet" href="./Style.css">
 
+  <!-- CSS -->
+  <link rel="stylesheet" href="./Style.css" />
 </head>
 
 <body>
+  <main class="container">
 
-  <!-- تسجيل دخول (واجهة أولى بسيطة) -->
-  <div class="card login">
-    <h2>تسجيل دخول</h2>
-    <p class="muted">اكتبي اسمك عشان نعطيك اقتراح ستايل وألوان 👌</p>
+    <!-- Login Section -->
+    <section class="card login" aria-label="تسجيل الدخول">
+      <h2>تسجيل دخول</h2>
+      <p class="muted">اكتبي اسمك عشان أعطيك اقتراح ستايل وألوان ✨</p>
 
-    <form id="loginForm">
-      <label for="userName">اسمك</label>
-      <input id="userName" type="text" placeholder="مثال: رتاجي" required />
-      <button type="submit">دخول</button>
-    </form>
+      <form id="loginForm">
+        <label for="userName">اسمك</label>
+        <input id="userName" type="text" placeholder="مثال: رتاجي" required />
+        <button type="submit">دخول</button>
+      </form>
 
-    <p id="welcomeMsg" class="muted"></p>
-  </div>
+      <p id="welcomeMsg" class="muted"></p>
+    </section>
 
-  <!-- Section Hero (header) -->
-  <header class="card hero">
-    <div>
-      <h1>رتاج</h1>
-      <p id="helloUser" class="muted"></p>
-      <p class="muted">صفحة نموذج أولي لموقع يقترح ستايل غرفة وألوان مناسبة حسب تفضيلاتك.</p>
-    </div>
+    <!-- Hero Section -->
+    <header class="card hero" aria-label="الواجهة الرئيسية">
+      <div class="hero-text">
+        <h1>رتاجي</h1>
+        <p id="helloUser" class="muted"></p>
+        <p class="muted">
+          صفحة نموذج أولي لموقع يقترح ستايل غرفة وألوان مناسبة حسب تفضيلاتك.
+        </p>
+      </div>
 
-  <img src="https://via.placeholder.com/900x420" alt="تصميم غرفة أنيق" />
-  </header>
+      <!-- لو عندك صورة محلية -->
+      <!-- <img src="images/hero.jpg" alt="تصميم غرفة أنيق" /> -->
 
-  <!-- Section About (section) -->
-  <section class="card" id="mainSection">
-    <h2>عن المشروع</h2>
-    <p class="muted">
-      الفكرة: المستخدم يحدد نوع الغرفة والستايل، والموقع يعطيه اقتراح ألوان وعناصر مناسبة.
-    </p>
+      <!-- أو خليها مؤقتًا Placeholder -->
+      <img src="https://via.placeholder.com/1200x600" alt="صورة غرفة" />
+    </header>
 
-    <h3>المهارات اللي تعلمتها</h3>
-    <ul>
-      <li>HTML</li>
-      <li>CSS</li>
-      <li>JavaScript</li>
-    </ul>
+    <!-- About + Quick Suggestion -->
+    <section class="card" id="mainSection" aria-label="عن المشروع والاقتراح">
+      <h2>عن المشروع</h2>
+      <p class="muted">
+        الفكرة: المستخدم يحدد نوع الغرفة والستايل، والموقع يعطيه اقتراح ألوان وعناصر مناسبة.
+      </p>
 
-    <!-- أداة اقتراح بسيطة -->
-    <div class="mini-tool">
-      <h3>اقتراح سريع</h3>
+      <h3>المهارات اللي تعلمتها</h3>
+      <ul>
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+      </ul>
 
-      <label for="roomType">نوع الغرفة</label>
-      <select id="roomType">
-        <option value="bedroom">غرفة نوم</option>
-        <option value="living">غرفة معيشة</option>
-        <option value="office">مكتب</option>
-      </select>
+      <div class="mini-tool" aria-label="اقتراح سريع">
+        <h3>اقتراح سريع</h3>
 
-      <label for="style">الستايل</label>
-      <select id="style">
-        <option value="modern">مودرن</option>
-        <option value="minimal">مينيمال</option>
-        <option value="boho">بوهو</option>
-        <option value="classic">كلاسيك</option>
-      </select>
+        <label for="roomType">نوع الغرفة</label>
+        <select id="roomType">
+          <option value="bedroom">غرفة نوم</option>
+          <option value="living">غرفة معيشة</option>
+          <option value="office">مكتب</option>
+        </select>
 
-      <button id="suggestBtn" type="button">اقترح لي</button>
+        <label for="style">الستايل</label>
+        <select id="style">
+          <option value="modern">مودرن</option>
+          <option value="minimal">مينيمال</option>
+          <option value="boho">بوهو</option>
+          <option value="classic">كلاسيك</option>
+        </select>
 
-      <div id="result" class="result" aria-live="polite"></div>
-    </div>
-  </section>
+        <button id="suggestBtn" type="button">اقترح لي</button>
 
-  <!-- Section Contact (footer) -->
-  <footer class="card">
-    <h2>تواصل</h2>
+        <div id="result" class="result" aria-live="polite"></div>
+      </div>
+    </section>
 
-    <a class="link" href="mailto:yourname@example.com">راسلني على البريد</a>
+    <!-- Footer / Contact -->
+    <footer class="card" aria-label="التواصل">
+      <h2>تواصل</h2>
+      <a class="link" href="mailto:yourname@example.com">راسليني على البريد</a>
 
-    <p class="hello">قل مرحباً!</p>
-    <button id="visitBtn" type="button">لزيارة موقعي!</button>
-  </footer>
+      <p class="hello">قل مرحباً!</p>
+      <button id="visitBtn" type="button">لزيارة موقعي!</button>
+    </footer>
 
-  <script src="script.js"></script>
+  </main>
+
+  <!-- JS -->
+  <script src="./Script.js"></script>
 </body>
 </html>
-
