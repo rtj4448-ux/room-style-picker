@@ -8,7 +8,7 @@
 </head>
 
 <body>
-  <!-- NAVBAR -->
+<body>
   <nav class="nav">
     <div class="nav__inner">
       <div class="brand">
@@ -31,65 +31,34 @@
 
   <main class="container">
 
-    <!-- HERO (header) -->
     <header class="hero">
       <h1 class="hero__title">صممي غرفتك الحلم</h1>
-      <p class="hero__subtitle">
-        اختاري نوع الغرفة والستايل، ونقترح لك ألوان وعناصر مناسبة خلال ثواني.
-      </p>
-
-      <button class="btn btn--primary btn--big" id="heroBtn" type="button">
-        صممي غرفتك مجانًا
-      </button>
+      <p class="hero__subtitle">اختاري نوع الغرفة والستايل، ونقترح لك ألوان وعناصر مناسبة خلال ثواني.</p>
+      <button class="btn btn--primary btn--big" id="heroBtn" type="button">صممي غرفتك مجانًا</button>
     </header>
 
-    <!-- FEATURES (section) -->
-    <section class="section" id="features" aria-label="ميزات الموقع">
+    <section class="section" id="features">
       <div class="cards">
         <article class="card">
-<img src="images/hero.jpg" alt="صورة غرفة" />
           <h3 class="card__title">Room planner</h3>
           <p class="card__text">اقتراح توزيع أثاث مناسب لمساحة غرفتك.</p>
         </article>
-
         <article class="card">
-<img src="images/hero.jpg" alt="صورة غرفة" />
           <h3 class="card__title">Color palette</h3>
           <p class="card__text">لوحة ألوان جاهزة تناسب الستايل.</p>
         </article>
-
         <article class="card">
-<img src="images/hero.jpg" alt="صورة غرفة" />
           <h3 class="card__title">Furniture picks</h3>
           <p class="card__text">قائمة عناصر أساسية + لمسات ديكور.</p>
         </article>
-
         <article class="card">
-<img src="images/hero.jpg" alt="صورة غرفة" />
           <h3 class="card__title">DIY decor</h3>
           <p class="card__text">اقتراحات بسيطة تعطي “ستايل” سريع.</p>
         </article>
       </div>
     </section>
 
-    <!-- LOGIN (اختياري شكلي) -->
-    <section class="section login" id="login" aria-label="تسجيل الدخول">
-      <div class="login__box">
-        <h2 class="section__title">تسجيل دخول</h2>
-        <p class="muted">اكتبي اسمك عشان نحفظ تفضيلاتك.</p>
-
-        <form id="loginForm" class="form">
-          <label for="userName">اسمك</label>
-          <input id="userName" type="text" placeholder="مثال: رتاجي" required />
-          <button class="btn btn--secondary" type="submit">دخول</button>
-        </form>
-
-        <p id="welcomeMsg" class="muted"></p>
-      </div>
-    </section>
-
-    <!-- TOOL (section) -->
-    <section class="section tool" id="tool" aria-label="أداة الاقتراح">
+    <section class="section tool" id="tool">
       <h2 class="section__title">اقتراح سريع</h2>
       <p class="muted">اختاري الخيارات واضغطي “اقترح”.</p>
 
@@ -115,33 +84,24 @@
       </div>
 
       <button class="btn btn--primary" id="suggestBtn" type="button">اقترح لي</button>
-      <div id="result" class="result" aria-live="polite"></div>
-
-      <h3 class="section__title" style="margin-top:18px;">المهارات اللي تعلمتها</h3>
-      <ul class="skills">
-        <li>HTML</li>
-        <li>CSS</li>
-        <li>JavaScript</li>
-      </ul>
+      <div id="result" class="result"></div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="footer" id="contact" aria-label="التواصل">
+    <footer class="footer" id="contact">
       <div class="footer__inner">
         <div>
           <h2 class="footer__title">تواصل</h2>
           <a class="footer__link" href="mailto:yourname@example.com">راسليني على البريد</a>
         </div>
-
-        <div class="footer__cta">
-          <p class="muted">قل مرحباً!</p>
-          <button class="btn btn--secondary" id="visitBtn" type="button">لزيارة موقعي!</button>
-        </div>
+        <button class="btn btn--secondary" id="visitBtn" type="button">لزيارة موقعي!</button>
       </div>
     </footer>
+
   </main>
-<script src="script.js?v=1"></script>
+
+  <script src="./script.js?v=1"></script>
 </body>
 </html>
+
 
 
