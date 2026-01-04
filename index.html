@@ -4,95 +4,49 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Room Style Picker</title>
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="./Style.css" />
+  <link rel="stylesheet" href="./style.css" />
 </head>
 
 <body>
-  <main class="container">
-
-    <!-- Login Section -->
-    <section class="card login" aria-label="تسجيل الدخول">
-      <h2>تسجيل دخول</h2>
-      <p class="muted">اكتبي اسمك عشان أعطيك اقتراح ستايل وألوان ✨</p>
-
-      <form id="loginForm">
-        <label for="userName">اسمك</label>
-        <input id="userName" type="text" placeholder="مثال: رتاجي" required />
-        <button type="submit">دخول</button>
-      </form>
-
-      <p id="welcomeMsg" class="muted"></p>
-    </section>
-
-    <!-- Hero Section -->
-    <header class="card hero" aria-label="الواجهة الرئيسية">
-      <div class="hero-text">
-        <h1>رتاجي</h1>
-        <p id="helloUser" class="muted"></p>
-        <p class="muted">
-          صفحة نموذج أولي لموقع يقترح ستايل غرفة وألوان مناسبة حسب تفضيلاتك.
-        </p>
+  <!-- NAVBAR -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <div class="brand">
+        <div class="brand__logo">R</div>
+        <span class="brand__name">RoomStyle</span>
       </div>
 
-      <!-- لو عندك صورة محلية -->
-      <!-- <img src="images/hero.jpg" alt="تصميم غرفة أنيق" /> -->
-
-      <!-- أو خليها مؤقتًا Placeholder -->
-      <img src="https://via.placeholder.com/1200x600" alt="صورة غرفة" />
-    </header>
-
-    <!-- About + Quick Suggestion -->
-    <section class="card" id="mainSection" aria-label="عن المشروع والاقتراح">
-      <h2>عن المشروع</h2>
-      <p class="muted">
-        الفكرة: المستخدم يحدد نوع الغرفة والستايل، والموقع يعطيه اقتراح ألوان وعناصر مناسبة.
-      </p>
-
-      <h3>المهارات اللي تعلمتها</h3>
-      <ul>
-        <li>HTML</li>
-        <li>CSS</li>
-        <li>JavaScript</li>
+      <ul class="nav__links">
+        <li><a href="#features">الميزات</a></li>
+        <li><a href="#tool">الاقتراح</a></li>
+        <li><a href="#contact">تواصل</a></li>
       </ul>
 
-      <div class="mini-tool" aria-label="اقتراح سريع">
-        <h3>اقتراح سريع</h3>
-
-        <label for="roomType">نوع الغرفة</label>
-        <select id="roomType">
-          <option value="bedroom">غرفة نوم</option>
-          <option value="living">غرفة معيشة</option>
-          <option value="office">مكتب</option>
-        </select>
-
-        <label for="style">الستايل</label>
-        <select id="style">
-          <option value="modern">مودرن</option>
-          <option value="minimal">مينيمال</option>
-          <option value="boho">بوهو</option>
-          <option value="classic">كلاسيك</option>
-        </select>
-
-        <button id="suggestBtn" type="button">اقترح لي</button>
-
-        <div id="result" class="result" aria-live="polite"></div>
+      <div class="nav__actions">
+        <a class="nav__login" href="#login">Login</a>
+        <button class="btn btn--primary" id="startBtn" type="button">Start for Free</button>
       </div>
-    </section>
+    </div>
+  </nav>
 
-    <!-- Footer / Contact -->
-    <footer class="card" aria-label="التواصل">
-      <h2>تواصل</h2>
-      <a class="link" href="mailto:yourname@example.com">راسليني على البريد</a>
+  <main class="container">
 
-      <p class="hello">قل مرحباً!</p>
-      <button id="visitBtn" type="button">لزيارة موقعي!</button>
-    </footer>
+    <!-- HERO (header) -->
+    <header class="hero">
+      <h1 class="hero__title">صممي غرفتك الحلم</h1>
+      <p class="hero__subtitle">
+        اختاري نوع الغرفة والستايل، ونقترح لك ألوان وعناصر مناسبة خلال ثواني.
+      </p>
 
-  </main>
+      <button class="btn btn--primary btn--big" id="heroBtn" type="button">
+        صممي غرفتك مجانًا
+      </button>
+    </header>
 
-  <!-- JS -->
-  <script src="./Script.js"></script>
-</body>
-</html>
+    <!-- FEATURES (section) -->
+    <section class="section" id="features" aria-label="ميزات الموقع">
+      <div class="cards">
+        <article class="card">
+          <img class="card__img" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=60" alt="تخطيط غرفة" />
+          <h3 class="card__title">Room planner</h3>
+          <p
