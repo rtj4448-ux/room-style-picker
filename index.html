@@ -32,46 +32,81 @@
 
   <main class="container">
 
-    <!-- HERO (header) -->
+    <!-- HERO -->
     <header class="hero" aria-label="الواجهة الرئيسية">
       <h1 class="hero__title">صممي غرفتك الحلم</h1>
       <p class="hero__subtitle">
-        اختاري نوع الغرفة والستايل، ونقترح لك ألوان وعناصر مناسبة خلال ثواني.
+        اختاري نوع الغرفة والستايل، ونقترح لك ألوان وعناصر وروابط بحث مناسبة خلال ثواني.
       </p>
       <button class="btn btn--primary btn--big" id="heroBtn" type="button">صممي غرفتك مجانًا</button>
     </header>
 
-    <!-- FEATURES -->
+    <!-- FEATURES (الكروت صارت روابط) -->
     <section class="section" id="features" aria-label="ميزات الموقع">
       <h2 class="section__title">الميزات</h2>
-      <p class="muted">فكرة بسيطة لكن عملية: اقتراح ستايل + ألوان + عناصر.</p>
-<div class="cards">
-  <a class="card card--link" href="#diy" data-go="section">
-    <img class="card__img" src="images/diy.jpg" alt="DIY decor" />
-    <h3 class="card__title">DIY decor</h3>
-    <p class="card__text">اقتراحات بسيطة تعطي “ستايل” سريع.</p>
-  </a>
+      <p class="muted">اضغطي على أي بطاقة عشان تروحين لقسمها.</p>
 
-  <a class="card card--link" href="#furniture" data-go="section">
-    <img class="card__img" src="images/furniture.jpg" alt="Furniture picks" />
-    <h3 class="card__title">Furniture picks</h3>
-    <p class="card__text">قائمة عناصر أساسية + لمسات ديكور.</p>
-  </a>
+      <div class="cards">
+        <a class="card card--link" href="#diy">
+          <img class="card__img" src="images/diy.jpg" alt="DIY decor" />
+          <h3 class="card__title">DIY decor</h3>
+          <p class="card__text">اقتراحات بسيطة تعطي “ستايل” سريع.</p>
+        </a>
 
-  <a class="card card--link" href="#palette" data-go="section">
-    <img class="card__img" src="images/colors.jpg" alt="Color palette" />
-    <h3 class="card__title">Color palette</h3>
-    <p class="card__text">لوحة ألوان جاهزة تناسب الستايل.</p>
-  </a>
+        <a class="card card--link" href="#furniture">
+          <img class="card__img" src="images/furniture.jpg" alt="Furniture picks" />
+          <h3 class="card__title">Furniture picks</h3>
+          <p class="card__text">قائمة عناصر أساسية + روابط بحث منتجات.</p>
+        </a>
 
-  <a class="card card--link" href="#planner" data-go="section">
-    <img class="card__img" src="images/room-planner.jpg" alt="Room planner" />
-    <h3 class="card__title">Room planner</h3>
-    <p class="card__text">اقتراح توزيع أثاث مناسب لمساحة غرفتك.</p>
-  </a>
-</div>
+        <a class="card card--link" href="#palette">
+          <img class="card__img" src="images/colors.jpg" alt="Color palette" />
+          <h3 class="card__title">Color palette</h3>
+          <p class="card__text">لوحة ألوان جاهزة تناسب الستايل.</p>
+        </a>
 
-     
+        <a class="card card--link" href="#planner">
+          <img class="card__img" src="images/room-planner.jpg" alt="Room planner" />
+          <h3 class="card__title">Room planner</h3>
+          <p class="card__text">اقتراح توزيع أثاث مناسب لمساحة غرفتك.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- SECTIONS (موقع متكامل) -->
+    <section class="section" id="planner" aria-label="Room planner">
+      <h2 class="section__title">Room planner</h2>
+      <p class="muted">جرّب زر سريع: يختار خيارات تلقائيًا ويشغّل الاقتراح.</p>
+
+      <button class="btn btn--primary"
+              data-quick="true" data-room="living" data-style="modern" type="button">
+        تجربة تخطيط غرفة (مودرن)
+      </button>
+
+      <button class="btn btn--secondary" data-scroll="#tool" type="button">
+        اذهب لأداة الاقتراح
+      </button>
+    </section>
+
+    <section class="section" id="palette" aria-label="Color palette">
+      <h2 class="section__title">Color palette</h2>
+      <p class="muted">بعد ما تسوي اقتراح، راح تظهر الألوان هنا تلقائيًا.</p>
+      <div id="paletteBox" class="result">اختر اقتراح من قسم “الاقتراح” عشان تظهر لوحة الألوان.</div>
+      <button class="btn btn--secondary" data-scroll="#tool" type="button">اختر الستايل أولاً</button>
+    </section>
+
+    <section class="section" id="furniture" aria-label="Furniture picks">
+      <h2 class="section__title">Furniture picks</h2>
+      <p class="muted">روابط بحث عامة (Amazon / IKEA / Noon) حسب الستايل.</p>
+      <div id="linksBox" class="result">اختر اقتراح أولاً عشان نطلع روابط المنتجات هنا.</div>
+      <button class="btn btn--secondary" data-scroll="#tool" type="button">اذهب لأداة الاقتراح</button>
+    </section>
+
+    <section class="section" id="diy" aria-label="DIY decor">
+      <h2 class="section__title">DIY decor</h2>
+      <p class="muted">أفكار ديكور بسيطة حسب آخر اقتراح.</p>
+      <div id="diyBox" class="result">اختاري اقتراح أولاً عشان نطلع أفكار DIY هنا.</div>
+      <button class="btn btn--secondary" data-scroll="#tool" type="button">ابدئي من الاقتراح</button>
     </section>
     <section class="section tool" id="tool" aria-label="أداة الاقتراح">
       <h2 class="section__title">اقتراح سريع</h2>
@@ -106,6 +141,13 @@
         <button class="btn btn--secondary" id="saveDesignBtn" type="button">حفظ هذا التصميم</button>
         <button class="btn btn--secondary" id="clearSavedBtn" type="button">حذف كل المحفوظات</button>
       </div>
+
+      <h3 class="section__title" style="margin-top:18px;">المهارات اللي تعلمتها</h3>
+      <ul class="skills">
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+      </ul>
     </section>
     <section class="section" id="saved" aria-label="التصاميم المحفوظة">
       <h2 class="section__title">تصاميمك المحفوظة</h2>
@@ -132,6 +174,3 @@
   <script src="script.js?v=1"></script>
 </body>
 </html>
-
-
-
