@@ -1,7 +1,8 @@
+// ====== Helpers ======
 const $ = (id) => document.getElementById(id);
 
 function colorDots(colors) {
-  return colors
+  return (colors || [])
     .map(
       (c) =>
         `<span style="display:inline-block;width:18px;height:18px;border-radius:6px;background:${c};border:1px solid #e2e8f0;margin-left:6px;"></span>`
@@ -18,16 +19,16 @@ function safeJsonParse(text, fallback) {
   try { return JSON.parse(text); } catch { return fallback; }
 }
 
-// ====== LocalStorage keys ======
 const KEY_SAVED = "savedDesigns";
 const KEY_CART = "cartItems";
+const KEY_CURRENT = "currentResult"; // ✅ النتيجة الحالية للعرض في results.html
 
 // ====== Required Alert Button ======
 $("visitBtn")?.addEventListener("click", () => {
   alert("شكراً لزيارة موقعي!");
 });
 
-// ====== Scroll buttons (Landing Page buttons) ======
+// ====== Scroll buttons (Landing Page) ======
 $("startBtn")?.addEventListener("click", () =>
   $("tool")?.scrollIntoView({ behavior: "smooth" })
 );
@@ -47,7 +48,7 @@ document.querySelectorAll("[data-scroll]").forEach((btn) => {
 let DATA = null;
 
 async function loadData() {
-  const res = await fetch("./data.json?v=2");
+  const res = await fetch("./data.json?v=3");
   if (!res.ok) throw new Error("Failed to load data.json");
   DATA = await res.json();
 }
@@ -72,7 +73,7 @@ function buildRecommendation(roomType, styleKey) {
   };
 }
 
-// ====== General product links (Amazon / IKEA / Noon) ======
+// ====== Product links (Amazon / IKEA / Noon) ======
 function searchLink(site, query) {
   const q = encodeURIComponent(query);
   if (site === "amazon") return `https://www.amazon.sa/s?k=${q}`;
@@ -95,9 +96,7 @@ function productSearchLinks(styleKey, roomType) {
     <div style="margin-top:12px;">
       <strong>روابط منتجات (بحث عام) + إضافة للسلة:</strong>
       <ul style="margin-top:8px;">
-        ${queries
-          .map(
-            (q) => `
+        ${queries.map((q) => `
           <li style="margin-bottom:10px;">
             <div><strong>${q}</strong></div>
             <div style="margin-top:6px;">
@@ -109,15 +108,12 @@ function productSearchLinks(styleKey, roomType) {
               <button class="small-btn" data-addcart="1" data-query="${encodeURIComponent(q)}">أضف للسلة</button>
             </div>
           </li>
-        `
-          )
-          .join("")}
+        `).join("")}
       </ul>
     </div>
   `;
 }
 
-// ====== Render main result ======
 function renderResult(rec, selections) {
   const result = $("result");
   if (!result) return;
@@ -133,9 +129,7 @@ function renderResult(rec, selections) {
   `;
 }
 
-// ====== Fill extra sections (Palette/Furniture/DIY) ======
 function fillExtraSections(rec, selections) {
-  // Palette
   const paletteBox = $("paletteBox");
   if (paletteBox) {
     paletteBox.innerHTML = `
@@ -144,13 +138,11 @@ function fillExtraSections(rec, selections) {
     `;
   }
 
-  // Links
   const linksBox = $("linksBox");
   if (linksBox) {
     linksBox.innerHTML = productSearchLinks(selections.styleKey, selections.roomType);
   }
 
-  // DIY
   const diyBox = $("diyBox");
   if (diyBox) {
     const styleName = DATA.styles[selections.styleKey]?.name_ar || "هذا الستايل";
@@ -165,46 +157,6 @@ function fillExtraSections(rec, selections) {
   }
 }
 
-// ====== Tool UI ======
-const roomTypeEl = $("roomType");
-const styleEl = $("style");
-const suggestBtn = $("suggestBtn");
-
-let lastRecommendation = null;
-let lastSelections = null;
-
-suggestBtn?.addEventListener("click", () => {
-  if (!DATA) return;
-
-  const roomType = roomTypeEl?.value;
-  const styleKey = styleEl?.value;
-  if (!roomType || !styleKey) return;
-
-  const rec = buildRecommendation(roomType, styleKey);
-
-  lastRecommendation = rec;
-  lastSelections = { roomType, styleKey };
-
-  renderResult(rec, lastSelections);
-  fillExtraSections(rec, lastSelections);
-
-  $("result")?.scrollIntoView({ behavior: "smooth", block: "start" });
-});
-
-// Quick actions
-document.querySelectorAll("[data-quick='true']").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const room = btn.getAttribute("data-room");
-    const style = btn.getAttribute("data-style");
-
-    if (roomTypeEl) roomTypeEl.value = room;
-    if (styleEl) styleEl.value = style;
-
-    suggestBtn?.click();
-    $("tool")?.scrollIntoView({ behavior: "smooth" });
-  });
-});
-
 // ====== Saved Designs ======
 function loadSaved() {
   return safeJsonParse(localStorage.getItem(KEY_SAVED) || "[]", []);
@@ -213,98 +165,29 @@ function saveSaved(list) {
   localStorage.setItem(KEY_SAVED, JSON.stringify(list));
 }
 
-const saveDesignBtn = $("saveDesignBtn");
-const clearSavedBtn = $("clearSavedBtn");
-const savedList = $("savedList");
-
 function renderSaved() {
+  const savedList = $("savedList");
   if (!savedList) return;
 
   const saved = loadSaved();
-
   if (saved.length === 0) {
     savedList.innerHTML = `<div class="muted">ما عندك تصاميم محفوظة حالياً.</div>`;
     return;
   }
 
-  savedList.innerHTML = saved
-    .map(
-      (d, idx) => `
-      <div class="saved-card">
-        <h3>${d.title}</h3>
-        <p class="meta">تم الحفظ: ${d.savedAt}</p>
-        <div>الألوان: ${colorDots(d.colors)}</div>
-        ${d.hint ? `<p class="meta" style="margin-top:10px;">${d.hint}</p>` : ""}
-
-        <div class="actions">
-          <button class="small-btn" data-action="load" data-idx="${idx}">تطبيق</button>
-          <button class="small-btn" data-action="delete" data-idx="${idx}">حذف</button>
-        </div>
+  savedList.innerHTML = saved.map((d, idx) => `
+    <div class="saved-card">
+      <h3>${d.title}</h3>
+      <p class="meta">تم الحفظ: ${d.savedAt}</p>
+      <div>الألوان: ${colorDots(d.colors)}</div>
+      ${d.hint ? `<p class="meta" style="margin-top:10px;">${d.hint}</p>` : ""}
+      <div class="actions">
+        <button class="small-btn" data-action="load" data-idx="${idx}">تطبيق</button>
+        <button class="small-btn" data-action="delete" data-idx="${idx}">حذف</button>
       </div>
-    `
-    )
-    .join("");
+    </div>
+  `).join("");
 }
-
-saveDesignBtn?.addEventListener("click", () => {
-  if (!lastRecommendation || !lastSelections) {
-    alert("اختاري نوع الغرفة والستايل ثم اضغطي (اقترح لي) أولاً.");
-    return;
-  }
-
-  const saved = loadSaved();
-  saved.unshift({
-    ...lastRecommendation,
-    ...lastSelections,
-    savedAt: nowLabel()
-  });
-
-  saveSaved(saved.slice(0, 20));
-  renderSaved();
-  alert("تم حفظ التصميم ✅");
-});
-
-clearSavedBtn?.addEventListener("click", () => {
-  localStorage.removeItem(KEY_SAVED);
-  renderSaved();
-});
-
-savedList?.addEventListener("click", (e) => {
-  const btn = e.target.closest("button");
-  if (!btn) return;
-
-  const action = btn.getAttribute("data-action");
-  const idx = Number(btn.getAttribute("data-idx"));
-
-  const saved = loadSaved();
-  const item = saved[idx];
-  if (!item) return;
-
-  if (action === "delete") {
-    saved.splice(idx, 1);
-    saveSaved(saved);
-    renderSaved();
-    return;
-  }
-
-  if (action === "load") {
-    if (roomTypeEl) roomTypeEl.value = item.roomType;
-    if (styleEl) styleEl.value = item.styleKey;
-
-    lastRecommendation = {
-      title: item.title,
-      hint: item.hint,
-      colors: item.colors,
-      items: item.items
-    };
-    lastSelections = { roomType: item.roomType, styleKey: item.styleKey };
-
-    renderResult(lastRecommendation, lastSelections);
-    fillExtraSections(lastRecommendation, lastSelections);
-
-    $("tool")?.scrollIntoView({ behavior: "smooth" });
-  }
-});
 
 // ====== Cart ======
 function loadCart() {
@@ -314,16 +197,14 @@ function saveCart(list) {
   localStorage.setItem(KEY_CART, JSON.stringify(list));
 }
 
-const cartListEl = $("cartList");
-const cartCountEl = $("cartCount");
-const clearCartBtn = $("clearCartBtn");
-
 function setCartCount() {
-  const cart = loadCart();
-  if (cartCountEl) cartCountEl.textContent = String(cart.length);
+  const el = $("cartCount");
+  if (!el) return;
+  el.textContent = String(loadCart().length);
 }
 
 function renderCart() {
+  const cartListEl = $("cartList");
   if (!cartListEl) return;
 
   const cart = loadCart();
@@ -334,28 +215,22 @@ function renderCart() {
     return;
   }
 
-  cartListEl.innerHTML = cart
-    .map((item, idx) => {
-      const q = item.query;
-      return `
-        <div class="cart-item">
-          <p class="cart-item__title">${q}</p>
-          <div class="cart-item__links">
-            <a href="${searchLink("amazon", q)}" target="_blank" rel="noopener noreferrer">Amazon</a>
-            | <a href="${searchLink("ikea", q)}" target="_blank" rel="noopener noreferrer">IKEA</a>
-            | <a href="${searchLink("noon", q)}" target="_blank" rel="noopener noreferrer">Noon</a>
-          </div>
-
-          <div class="cart-item__actions">
-            <button class="small-btn" data-removecart="1" data-idx="${idx}">حذف</button>
-          </div>
-        </div>
-      `;
-    })
-    .join("");
+  cartListEl.innerHTML = cart.map((item, idx) => `
+    <div class="cart-item">
+      <p class="cart-item__title">${item.query}</p>
+      <div class="cart-item__links">
+        <a href="${searchLink("amazon", item.query)}" target="_blank" rel="noopener noreferrer">Amazon</a>
+        | <a href="${searchLink("ikea", item.query)}" target="_blank" rel="noopener noreferrer">IKEA</a>
+        | <a href="${searchLink("noon", item.query)}" target="_blank" rel="noopener noreferrer">Noon</a>
+      </div>
+      <div class="cart-item__actions">
+        <button class="small-btn" data-removecart="1" data-idx="${idx}">حذف</button>
+      </div>
+    </div>
+  `).join("");
 }
 
-// Add to cart using event delegation
+// add/remove cart (delegation)
 document.addEventListener("click", (e) => {
   const addBtn = e.target.closest("[data-addcart]");
   if (!addBtn) return;
@@ -364,13 +239,12 @@ document.addEventListener("click", (e) => {
   const query = decodeURIComponent(encoded);
 
   const cart = loadCart();
-
-  // منع التكرار
   const exists = cart.some((x) => x.query === query);
+
   if (!exists) {
     cart.unshift({ query, addedAt: nowLabel() });
     saveCart(cart.slice(0, 50));
-    renderCart();
+    setCartCount();
     alert("تمت الإضافة للسلة ✅");
   } else {
     alert("هذا موجود بالسلة بالفعل 🙂");
@@ -386,25 +260,25 @@ document.addEventListener("click", (e) => {
   cart.splice(idx, 1);
   saveCart(cart);
   renderCart();
+  setCartCount();
 });
 
-clearCartBtn?.addEventListener("click", () => {
+$("clearCartBtn")?.addEventListener("click", () => {
   localStorage.removeItem(KEY_CART);
   renderCart();
+  setCartCount();
 });
 
 // ====== Export / Import ======
 function downloadJson(filename, obj) {
   const blob = new Blob([JSON.stringify(obj, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
-
   const a = document.createElement("a");
   a.href = url;
   a.download = filename;
   document.body.appendChild(a);
   a.click();
   a.remove();
-
   URL.revokeObjectURL(url);
 }
 
@@ -434,15 +308,155 @@ $("importFile")?.addEventListener("change", async (e) => {
 
   renderSaved();
   renderCart();
+  setCartCount();
 
   alert("تم الاستيراد ✅");
   e.target.value = "";
 });
+
+// ====== Tool (index page): redirect to results.html instead of scrolling ======
+const roomTypeEl = $("roomType");
+const styleEl = $("style");
+const suggestBtn = $("suggestBtn");
+
+let lastRecommendation = null;
+let lastSelections = null;
+
+suggestBtn?.addEventListener("click", () => {
+  if (!DATA) return;
+
+  const roomType = roomTypeEl?.value;
+  const styleKey = styleEl?.value;
+  if (!roomType || !styleKey) return;
+
+  const rec = buildRecommendation(roomType, styleKey);
+  const selections = { roomType, styleKey };
+
+  // خزّني النتيجة عشان results.html يقرأها
+  localStorage.setItem(KEY_CURRENT, JSON.stringify({
+    rec,
+    selections,
+    createdAt: nowLabel()
+  }));
+
+  // ✅ بدال ما ينزل لتحت: يروح لصفحة النتائج
+  window.location.href = "results.html";
+});
+
+// Quick actions -> same redirect
+document.querySelectorAll("[data-quick='true']").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const roomType = btn.getAttribute("data-room");
+    const styleKey = btn.getAttribute("data-style");
+
+    const rec = buildRecommendation(roomType, styleKey);
+    const selections = { roomType, styleKey };
+
+    localStorage.setItem(KEY_CURRENT, JSON.stringify({
+      rec,
+      selections,
+      createdAt: nowLabel()
+    }));
+
+    window.location.href = "results.html";
+  });
+});
+
+// Save design (works on results.html too)
+$("saveDesignBtn")?.addEventListener("click", () => {
+  // لو كنا في results.html نقرأ من currentResult
+  if (!lastRecommendation || !lastSelections) {
+    const current = safeJsonParse(localStorage.getItem(KEY_CURRENT) || "null", null);
+    if (current?.rec && current?.selections) {
+      lastRecommendation = current.rec;
+      lastSelections = current.selections;
+    }
+  }
+
+  if (!lastRecommendation || !lastSelections) {
+    alert("ما فيه نتيجة جاهزة للحفظ. سوي اقتراح أولاً.");
+    return;
+  }
+
+  const saved = loadSaved();
+  saved.unshift({
+    ...lastRecommendation,
+    ...lastSelections,
+    savedAt: nowLabel()
+  });
+
+  saveSaved(saved.slice(0, 20));
+  renderSaved();
+  alert("تم حفظ التصميم ✅");
+});
+
+// Saved list buttons (على index.html فقط غالبًا)
+$("savedList")?.addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+
+  const action = btn.getAttribute("data-action");
+  const idx = Number(btn.getAttribute("data-idx"));
+
+  const saved = loadSaved();
+  const item = saved[idx];
+  if (!item) return;
+
+  if (action === "delete") {
+    saved.splice(idx, 1);
+    saveSaved(saved);
+    renderSaved();
+    return;
+  }
+
+  if (action === "load") {
+    // نفتح results.html على التصميم المحفوظ
+    localStorage.setItem(KEY_CURRENT, JSON.stringify({
+      rec: {
+        title: item.title,
+        hint: item.hint,
+        colors: item.colors,
+        items: item.items
+      },
+      selections: { roomType: item.roomType, styleKey: item.styleKey },
+      createdAt: nowLabel()
+    }));
+    window.location.href = "results.html";
+  }
+});
+
+// ====== Init ======
 (async function init() {
   try {
     await loadData();
+
+    // تحديث عداد السلة على أي صفحة
+    setCartCount();
+
+    // لو صفحة النتائج: اعرض النتيجة
+    const isResults = window.location.pathname.endsWith("/results.html") || window.location.pathname.endsWith("results.html");
+    if (isResults) {
+      const current = safeJsonParse(localStorage.getItem(KEY_CURRENT) || "null", null);
+
+      if (!current?.rec || !current?.selections) {
+        $("result") && ($("result").innerHTML = "ما فيه نتيجة حالياً. ارجعي للرئيسية وسوي اقتراح.");
+        return;
+      }
+
+      lastRecommendation = current.rec;
+      lastSelections = current.selections;
+
+      renderResult(lastRecommendation, lastSelections);
+      fillExtraSections(lastRecommendation, lastSelections);
+      return;
+    }
+
+    // لو صفحة السلة
+    if ($("cartList")) renderCart();
+
+    // لو صفحة الرئيسية
     renderSaved();
-    renderCart();
+
   } catch (err) {
     console.error(err);
     alert("في مشكلة بتحميل البيانات (data.json). تأكدي إنه موجود في نفس مكان index.html");
