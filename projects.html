@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>نسخ احتياطي | RoomStyle</title>
+  <link rel="stylesheet" href="style.css?v=2" />
+</head>
+
+<body>
+  <nav class="nav">
+    <div class="nav__inner">
+      <div class="brand">
+        <div class="brand__logo">R</div>
+        <span class="brand__name">RoomStyle</span>
+      </div>
+
+      <ul class="nav__links">
+        <li><a href="index.html">الرئيسية</a></li>
+        <li><a href="index.html#saved">المحفوظات</a></li>
+        <li><a href="cart.html">السلة <span id="cartCount" class="badge">0</span></a></li>
+        <li><a href="projects.html">نسخ احتياطي</a></li>
+      </ul>
+
+      <div class="nav__actions">
+        <a class="nav__login" href="index.html#tool">Login</a>
+        <a class="btn btn--primary" href="index.html#tool">ابدأ اقتراح</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="section" aria-label="نسخ احتياطي">
+      <h1 class="section__title">نسخ احتياطي</h1>
+      <p class="muted">تصدير/استيراد المحفوظات والسلة كملف واحد (مفيد لو تفتح الموقع بجهاز ثاني).</p>
+
+      <div class="row">
+        <button class="btn btn--primary" id="exportAllBtn" type="button">تصدير الكل (JSON)</button>
+
+        <label class="file-btn">
+          <input id="importFile" type="file" accept="application/json" />
+          استيراد ملف (JSON)
+        </label>
+
+        <a class="btn btn--secondary" href="cart.html">اذهب للسلة</a>
+      </div>
+
+      <div class="result" style="margin-top:14px;">
+        <strong>تنبيه:</strong> الاستيراد يستبدل البيانات الحالية بالموجودة في الملف.
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js?v=2"></script>
+</body>
+</html>
