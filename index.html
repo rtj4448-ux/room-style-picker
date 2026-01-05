@@ -8,7 +8,6 @@
 </head>
 
 <body>
-  <!-- NAVBAR -->
   <nav class="nav">
     <div class="nav__inner">
       <div class="brand">
@@ -20,8 +19,8 @@
         <li><a href="#features">الميزات</a></li>
         <li><a href="#tool">الاقتراح</a></li>
         <li><a href="#saved">المحفوظات</a></li>
-        <li><a href="#cart">السلة <span id="cartCount" class="badge">0</span></a></li>
-        <li><a href="#projects">نسخ احتياطي</a></li>
+       <li><a href="cart.html">السلة <span id="cartCount" class="badge">0</span></a></li>
+<li><a href="projects.html">نسخ احتياطي</a></li>
         <li><a href="#contact">تواصل</a></li>
       </ul>
 
@@ -34,19 +33,16 @@
 
   <main class="container">
 
-    <!-- HERO -->
     <header class="hero" aria-label="الواجهة الرئيسية">
-      <h1 class="hero__title">صممي غرفتك الحلم</h1>
+      <h1 class="hero__title">صمم غرفة أحلامك</h1>
       <p class="hero__subtitle">
-        اختاري نوع الغرفة والستايل، ونقترح لك ألوان وعناصر وروابط بحث—وتقدرين تضيفينها للسلة.
+        اختر نوع الغرفة والستايل، ونقترح لك ألوان وعناصر وروابط بحث—وتقدر تضيفها للسلة.
       </p>
-      <button class="btn btn--primary btn--big" id="heroBtn" type="button">صممي غرفتك مجانًا</button>
+      <button class="btn btn--primary btn--big" id="heroBtn" type="button">صمم غرفتك مجانًا</button>
     </header>
-
-    <!-- FEATURES -->
     <section class="section" id="features" aria-label="ميزات الموقع">
       <h2 class="section__title">الميزات</h2>
-      <p class="muted">اضغطي على أي بطاقة عشان تروحين لقسمها.</p>
+      <p class="muted">اضغط على أي بطاقة عشان تروح لقسمها.</p>
 
       <div class="cards">
         <a class="card card--link" href="#diy">
@@ -74,11 +70,9 @@
         </a>
       </div>
     </section>
-
-    <!-- SECTIONS -->
     <section class="section" id="planner" aria-label="Room planner">
       <h2 class="section__title">Room planner</h2>
-      <p class="muted">جرّبي زر سريع: يختار خيارات تلقائيًا ويشغّل الاقتراح.</p>
+      <p class="muted">جرّب زر سريع: يختار خيارات تلقائيًا ويشغّل الاقتراح.</p>
 
       <div class="row">
         <button class="btn btn--primary"
@@ -86,36 +80,34 @@
           تجربة تخطيط غرفة (مودرن)
         </button>
         <button class="btn btn--secondary" data-scroll="#tool" type="button">
-          روحي لأداة الاقتراح
+          روح لأداة الاقتراح
         </button>
       </div>
     </section>
 
     <section class="section" id="palette" aria-label="Color palette">
       <h2 class="section__title">Color palette</h2>
-      <p class="muted">بعد ما تسوين اقتراح، راح تظهر الألوان هنا تلقائيًا.</p>
-      <div id="paletteBox" class="result">اختاري اقتراح من قسم “الاقتراح” عشان تظهر لوحة الألوان.</div>
-      <button class="btn btn--secondary" data-scroll="#tool" type="button">اختاري الستايل أولاً</button>
+      <p class="muted">بعد ما تسوي اقتراح، راح تظهر الألوان هنا تلقائيًا.</p>
+      <div id="paletteBox" class="result">اختر اقتراح من قسم “الاقتراح” عشان تظهر لوحة الألوان.</div>
+      <button class="btn btn--secondary" data-scroll="#tool" type="button">اختر الستايل أولاً</button>
     </section>
 
     <section class="section" id="furniture" aria-label="Furniture picks">
       <h2 class="section__title">Furniture picks</h2>
-      <p class="muted">روابط بحث عامة (Amazon / IKEA / Noon). تقدرين تضيفين أي بحث للسلة.</p>
-      <div id="linksBox" class="result">اختاري اقتراح أولاً عشان نطلع روابط المنتجات هنا.</div>
-      <button class="btn btn--secondary" data-scroll="#tool" type="button">روحي لأداة الاقتراح</button>
+      <p class="muted">روابط بحث عامة (Amazon / IKEA / Noon). تقدر تضيف أي بحث للسلة.</p>
+      <div id="linksBox" class="result">اختر اقتراح أولاً عشان نطلع روابط المنتجات هنا.</div>
+      <button class="btn btn--secondary" data-scroll="#tool" type="button">روح لأداة الاقتراح</button>
     </section>
 
     <section class="section" id="diy" aria-label="DIY decor">
       <h2 class="section__title">DIY decor</h2>
       <p class="muted">أفكار ديكور بسيطة حسب آخر اقتراح.</p>
-      <div id="diyBox" class="result">اختاري اقتراح أولاً عشان نطلع أفكار DIY هنا.</div>
-      <button class="btn btn--secondary" data-scroll="#tool" type="button">ابدئي من الاقتراح</button>
+      <div id="diyBox" class="result">اختر اقتراح أولاً عشان نطلع أفكار DIY هنا.</div>
+      <button class="btn btn--secondary" data-scroll="#tool" type="button">ابدأ من الاقتراح</button>
     </section>
-
-    <!-- TOOL -->
     <section class="section tool" id="tool" aria-label="أداة الاقتراح">
       <h2 class="section__title">اقتراح سريع</h2>
-      <p class="muted">اختاري الخيارات واضغطي “اقترح لي”.</p>
+      <p class="muted">اختر الخيارات واضغط “اقترح لي”.</p>
 
       <div class="tool__grid">
         <div>
@@ -149,14 +141,12 @@
     </section>
     <section class="section" id="saved" aria-label="التصاميم المحفوظة">
       <h2 class="section__title">تصاميمك المحفوظة</h2>
-      <p class="muted">أي تصميم تحفظينه يظهر هنا.</p>
+      <p class="muted">أي تصميم يتم حفظه يظهر هنا.</p>
       <div id="savedList" class="saved-list"></div>
     </section>
-
-    <!-- CART -->
     <section class="section" id="cart" aria-label="السلة">
       <h2 class="section__title">السلة</h2>
-      <p class="muted">هنا تجمعين روابط البحث اللي أعجبتك عشان ترجعين لها بسهولة.</p>
+      <p class="muted">هنا تجمع روابط البحث اللي أعجبتك عشان ترجع لها بسهولة.</p>
 
       <div class="row">
         <button class="btn btn--secondary" id="clearCartBtn" type="button">تفريغ السلة</button>
@@ -164,11 +154,9 @@
 
       <div id="cartList" class="cart-list"></div>
     </section>
-
-    <!-- BACKUP / PROJECTS -->
     <section class="section" id="projects" aria-label="نسخ احتياطي">
       <h2 class="section__title">نسخ احتياطي</h2>
-      <p class="muted">تصدير/استيراد المحفوظات والسلة كملف واحد (عشان لو فتحتي الموقع بجهاز ثاني).</p>
+      <p class="muted">تصدير/استيراد المحفوظات والسلة كملف واحد (عشان لو فتحت الموقع بجهاز ثاني).</p>
 
       <div class="row">
         <button class="btn btn--primary" id="exportAllBtn" type="button">تصدير الكل (JSON)</button>
@@ -188,19 +176,16 @@
       <div class="footer__inner">
         <div>
           <h2 class="footer__title">تواصل</h2>
-          <a class="footer__link" href="mailto:yourname@example.com">راسليني على البريد</a>
+          <a class="footer__link" href="rtj4448@gmail.com">راسلني على البريد</a>
           <p class="muted" style="margin-top:8px;">المطوّر: رتاج</p>
         </div>
 
         <div class="footer__cta">
-          <p class="muted">قل مرحباً!</p>
           <button class="btn btn--secondary" id="visitBtn" type="button">لزيارة موقعي!</button>
         </div>
       </div>
     </footer>
-
   </main>
-
   <script src="script.js?v=2"></script>
 </body>
 </html>
