@@ -1,170 +1,306 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Room Style Picker</title>
-  <link rel="stylesheet" href="style.css?v=1" />
-</head>
+const $ = (id) => document.getElementById(id);
+function colorDots(colors) {
+  return colors
+    .map(
+      (c) =>
+        `<span style="display:inline-block;width:18px;height:18px;border-radius:6px;background:${c};border:1px solid #e2e8f0;margin-left:6px;"></span>`
+    )
+    .join("");
+}
+function loadSaved() {
+  try {
+    return JSON.parse(localStorage.getItem("savedDesigns") || "[]");
+  } catch {
+    return [];
+  }
+}
+function saveAll(list) {
+  localStorage.setItem("savedDesigns", JSON.stringify(list));
+}
 
-<body>
-  <!-- NAVBAR -->
-  <nav class="nav">
-    <div class="nav__inner">
-      <div class="brand">
-        <div class="brand__logo">R</div>
-        <span class="brand__name">RoomStyle</span>
-      </div>
+function nowLabel() {
+  const d = new Date();
+  return d.toLocaleString("ar-SA");
+}
 
-      <ul class="nav__links">
-        <li><a href="#features">الميزات</a></li>
-        <li><a href="#tool">الاقتراح</a></li>
-        <li><a href="#saved">المحفوظات</a></li>
-        <li><a href="#contact">تواصل</a></li>
+// ====== Required Alert Button ======
+$("visitBtn")?.addEventListener("click", () => {
+  alert("شكراً لزيارة موقعي!");
+});
+
+// ====== Scroll buttons (Landing Page buttons) ======
+$("startBtn")?.addEventListener("click", () =>
+  $("tool")?.scrollIntoView({ behavior: "smooth" })
+);
+$("heroBtn")?.addEventListener("click", () =>
+  $("tool")?.scrollIntoView({ behavior: "smooth" })
+);
+
+// ====== Smooth scroll for buttons with data-scroll ======
+document.querySelectorAll("[data-scroll]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const target = btn.getAttribute("data-scroll");
+    document.querySelector(target)?.scrollIntoView({ behavior: "smooth" });
+  });
+});
+
+// ====== Data (from data.json) ======
+let DATA = null;
+
+async function loadData() {
+  const res = await fetch("./data.json?v=1");
+  if (!res.ok) throw new Error("Failed to load data.json");
+  DATA = await res.json();
+}
+
+function roomNameAr(roomType) {
+  if (roomType === "bedroom") return "غرفة نوم";
+  if (roomType === "living") return "غرفة معيشة";
+  return "مكتب";
+}
+
+function buildRecommendation(roomType, styleKey) {
+  const style = DATA.styles[styleKey];
+  const room = DATA.roomRules[roomType];
+
+  const items = [...style.items, ...(room?.extraItems || [])];
+
+  return {
+    title: `${style.name_ar} لـ ${roomNameAr(roomType)}`,
+    hint: room?.hint_ar || "",
+    colors: style.colors,
+    items
+  };
+}
+
+// ====== General product links (Amazon / IKEA / Noon) ======
+function searchLink(site, query) {
+  const q = encodeURIComponent(query);
+
+  if (site === "amazon") return `https://www.amazon.sa/s?k=${q}`;
+  if (site === "ikea") return `https://www.ikea.com/sa/ar/search/?q=${q}`;
+  if (site === "noon") return `https://www.noon.com/saudi-ar/search?q=${q}`;
+
+  return "#";
+}
+
+function productSearchLinks(styleKey, roomType) {
+  const styleName = DATA.styles[styleKey].name_ar;
+  const roomName = roomNameAr(roomType);
+
+  const queries = [
+    `${styleName} ${roomName} كنبة`,
+    `${styleName} ${roomName} طاولة`,
+    `${styleName} ${roomName} إضاءة`
+  ];
+
+  return `
+    <div style="margin-top:12px;">
+      <strong>روابط منتجات (بحث عام):</strong>
+      <ul style="margin-top:8px;">
+        ${queries
+          .map(
+            (q) => `
+          <li>
+            ${q}
+            — <a href="${searchLink("amazon", q)}" target="_blank" rel="noopener noreferrer">Amazon</a>
+            | <a href="${searchLink("ikea", q)}" target="_blank" rel="noopener noreferrer">IKEA</a>
+            | <a href="${searchLink("noon", q)}" target="_blank" rel="noopener noreferrer">Noon</a>
+          </li>
+        `
+          )
+          .join("")}
       </ul>
+    </div>
+  `;
+}
 
-      <div class="nav__actions">
-        <a class="nav__login" href="#tool">Login</a>
-        <button class="btn btn--primary" id="startBtn" type="button">Start for Free</button>
+function renderResult(rec, selections) {
+  const result = $("result");
+  if (!result) return;
+
+  const productsHtml = productSearchLinks(selections.styleKey, selections.roomType);
+
+  result.innerHTML = `
+    <strong>اقتراحك: ${rec.title}</strong><br/>
+    ${rec.hint ? `<div style="margin-top:8px; color:#64748b;">${rec.hint}</div>` : ""}
+    <div style="margin-top:12px;">الألوان: ${colorDots(rec.colors)}</div>
+    <div style="margin-top:12px;"><strong>عناصر مقترحة:</strong> ${rec.items.join("، ")}</div>
+    ${productsHtml}
+  `;
+}
+
+// ====== Fill extra sections (Palette/Furniture/DIY) ======
+function fillExtraSections(rec, selections) {
+  // Palette
+  const paletteBox = $("paletteBox");
+  if (paletteBox) {
+    paletteBox.innerHTML = `
+      <strong>لوحة الألوان:</strong>
+      <div style="margin-top:10px;">${colorDots(rec.colors)}</div>
+    `;
+  }
+
+  // Links
+  const linksBox = $("linksBox");
+  if (linksBox) {
+    linksBox.innerHTML = productSearchLinks(selections.styleKey, selections.roomType);
+  }
+
+  // DIY ideas
+  const diyBox = $("diyBox");
+  if (diyBox) {
+    const styleName = DATA.styles[selections.styleKey]?.name_ar || "هذا الستايل";
+    diyBox.innerHTML = `
+      <strong>DIY أفكار سريعة (${styleName}):</strong>
+      <ul style="margin-top:10px;">
+        <li>غيّري الوسائد/البطانية بألوان من اللوحة.</li>
+        <li>أضيفي لوحة جدارية + إضاءة دافئة (لمبة أرضية أو أباجورة).</li>
+        <li>رتّبي زاوية نباتات صغيرة (طبيعية أو صناعية) للّمسات.</li>
+      </ul>
+    `;
+  }
+}
+
+// ====== Tool UI ======
+const roomTypeEl = $("roomType");
+const styleEl = $("style");
+const suggestBtn = $("suggestBtn");
+
+let lastRecommendation = null;
+let lastSelections = null;
+
+suggestBtn?.addEventListener("click", () => {
+  if (!DATA) return;
+
+  const roomType = roomTypeEl?.value;
+  const styleKey = styleEl?.value;
+  if (!roomType || !styleKey) return;
+
+  const rec = buildRecommendation(roomType, styleKey);
+
+  lastRecommendation = rec;
+  lastSelections = { roomType, styleKey };
+
+  renderResult(rec, lastSelections);
+  fillExtraSections(rec, lastSelections);
+
+  $("result")?.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+// ====== Quick actions: buttons with data-quick ======
+document.querySelectorAll("[data-quick='true']").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const room = btn.getAttribute("data-room");
+    const style = btn.getAttribute("data-style");
+
+    if (roomTypeEl) roomTypeEl.value = room;
+    if (styleEl) styleEl.value = style;
+
+    suggestBtn?.click();
+    $("tool")?.scrollIntoView({ behavior: "smooth" });
+  });
+});
+
+// ====== Save Designs ======
+const saveDesignBtn = $("saveDesignBtn");
+const clearSavedBtn = $("clearSavedBtn");
+const savedList = $("savedList");
+
+function renderSaved() {
+  if (!savedList) return;
+
+  const saved = loadSaved();
+
+  if (saved.length === 0) {
+    savedList.innerHTML = `<div class="muted">ما عندك تصاميم محفوظة حالياً.</div>`;
+    return;
+  }
+
+  savedList.innerHTML = saved
+    .map(
+      (d, idx) => `
+    <div class="saved-card">
+      <h3>${d.title}</h3>
+      <p class="meta">تم الحفظ: ${d.savedAt}</p>
+      <div>الألوان: ${colorDots(d.colors)}</div>
+      ${d.hint ? `<p class="meta" style="margin-top:10px;">${d.hint}</p>` : ""}
+
+      <div class="actions">
+        <button class="small-btn" data-action="load" data-idx="${idx}">تطبيق</button>
+        <button class="small-btn" data-action="delete" data-idx="${idx}">حذف</button>
       </div>
     </div>
-  </nav>
+  `
+    )
+    .join("");
+}
 
-  <main class="container">
+saveDesignBtn?.addEventListener("click", () => {
+  if (!lastRecommendation || !lastSelections) {
+    alert("اختاري نوع الغرفة والستايل ثم اضغطي (اقترح لي) أولاً.");
+    return;
+  }
 
-    <!-- HERO -->
-    <header class="hero" aria-label="الواجهة الرئيسية">
-      <h1 class="hero__title">صممي غرفتك الحلم</h1>
-      <p class="hero__subtitle">
-        اختاري نوع الغرفة والستايل، ونقترح لك ألوان وعناصر وروابط بحث مناسبة خلال ثواني.
-      </p>
-      <button class="btn btn--primary btn--big" id="heroBtn" type="button">صممي غرفتك مجانًا</button>
-    </header>
+  const saved = loadSaved();
+  saved.unshift({
+    ...lastRecommendation,
+    ...lastSelections,
+    savedAt: nowLabel()
+  });
 
-    <!-- FEATURES (الكروت صارت روابط) -->
-    <section class="section" id="features" aria-label="ميزات الموقع">
-      <h2 class="section__title">الميزات</h2>
-      <p class="muted">اضغطي على أي بطاقة عشان تروحين لقسمها.</p>
+  saveAll(saved.slice(0, 20));
+  renderSaved();
+  alert("تم حفظ التصميم ✅");
+});
 
-      <div class="cards">
-        <a class="card card--link" href="#diy">
-          <img class="card__img" src="images/diy.jpg" alt="DIY decor" />
-          <h3 class="card__title">DIY decor</h3>
-          <p class="card__text">اقتراحات بسيطة تعطي “ستايل” سريع.</p>
-        </a>
+clearSavedBtn?.addEventListener("click", () => {
+  localStorage.removeItem("savedDesigns");
+  renderSaved();
+});
 
-        <a class="card card--link" href="#furniture">
-          <img class="card__img" src="images/furniture.jpg" alt="Furniture picks" />
-          <h3 class="card__title">Furniture picks</h3>
-          <p class="card__text">قائمة عناصر أساسية + روابط بحث منتجات.</p>
-        </a>
+savedList?.addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
 
-        <a class="card card--link" href="#palette">
-          <img class="card__img" src="images/colors.jpg" alt="Color palette" />
-          <h3 class="card__title">Color palette</h3>
-          <p class="card__text">لوحة ألوان جاهزة تناسب الستايل.</p>
-        </a>
+  const action = btn.getAttribute("data-action");
+  const idx = Number(btn.getAttribute("data-idx"));
 
-        <a class="card card--link" href="#planner">
-          <img class="card__img" src="images/room-planner.jpg" alt="Room planner" />
-          <h3 class="card__title">Room planner</h3>
-          <p class="card__text">اقتراح توزيع أثاث مناسب لمساحة غرفتك.</p>
-        </a>
-      </div>
-    </section>
+  const saved = loadSaved();
+  const item = saved[idx];
+  if (!item) return;
 
-    <!-- SECTIONS (موقع متكامل) -->
-    <section class="section" id="planner" aria-label="Room planner">
-      <h2 class="section__title">Room planner</h2>
-      <p class="muted">جرّب زر سريع: يختار خيارات تلقائيًا ويشغّل الاقتراح.</p>
+  if (action === "delete") {
+    saved.splice(idx, 1);
+    saveAll(saved);
+    renderSaved();
+    return;
+  }
 
-      <button class="btn btn--primary"
-              data-quick="true" data-room="living" data-style="modern" type="button">
-        تجربة تخطيط غرفة (مودرن)
-      </button>
+  if (action === "load") {
+    if (roomTypeEl) roomTypeEl.value = item.roomType;
+    if (styleEl) styleEl.value = item.styleKey;
 
-      <button class="btn btn--secondary" data-scroll="#tool" type="button">
-        اذهب لأداة الاقتراح
-      </button>
-    </section>
+    lastRecommendation = {
+      title: item.title,
+      hint: item.hint,
+      colors: item.colors,
+      items: item.items
+    };
+    lastSelections = { roomType: item.roomType, styleKey: item.styleKey };
 
-    <section class="section" id="palette" aria-label="Color palette">
-      <h2 class="section__title">Color palette</h2>
-      <p class="muted">بعد ما تسوي اقتراح، راح تظهر الألوان هنا تلقائيًا.</p>
-      <div id="paletteBox" class="result">اختر اقتراح من قسم “الاقتراح” عشان تظهر لوحة الألوان.</div>
-      <button class="btn btn--secondary" data-scroll="#tool" type="button">اختر الستايل أولاً</button>
-    </section>
+    renderResult(lastRecommendation, lastSelections);
+    fillExtraSections(lastRecommendation, lastSelections);
 
-    <section class="section" id="furniture" aria-label="Furniture picks">
-      <h2 class="section__title">Furniture picks</h2>
-      <p class="muted">روابط بحث عامة (Amazon / IKEA / Noon) حسب الستايل.</p>
-      <div id="linksBox" class="result">اختر اقتراح أولاً عشان نطلع روابط المنتجات هنا.</div>
-      <button class="btn btn--secondary" data-scroll="#tool" type="button">اذهب لأداة الاقتراح</button>
-    </section>
-
-    <section class="section" id="diy" aria-label="DIY decor">
-      <h2 class="section__title">DIY decor</h2>
-      <p class="muted">أفكار ديكور بسيطة حسب آخر اقتراح.</p>
-      <div id="diyBox" class="result">اختاري اقتراح أولاً عشان نطلع أفكار DIY هنا.</div>
-      <button class="btn btn--secondary" data-scroll="#tool" type="button">ابدئي من الاقتراح</button>
-    </section>
-    <section class="section tool" id="tool" aria-label="أداة الاقتراح">
-      <h2 class="section__title">اقتراح سريع</h2>
-      <p class="muted">اختاري الخيارات واضغطي “اقترح لي”.</p>
-
-      <div class="tool__grid">
-        <div>
-          <label for="roomType">نوع الغرفة</label>
-          <select id="roomType">
-            <option value="bedroom">غرفة نوم</option>
-            <option value="living">غرفة معيشة</option>
-            <option value="office">مكتب</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="style">الستايل</label>
-          <select id="style">
-            <option value="modern">مودرن</option>
-            <option value="minimal">مينيمال</option>
-            <option value="boho">بوهو</option>
-            <option value="classic">كلاسيك</option>
-          </select>
-        </div>
-      </div>
-
-      <button class="btn btn--primary" id="suggestBtn" type="button">اقترح لي</button>
-
-      <div id="result" class="result" aria-live="polite"></div>
-
-      <div class="tool-actions">
-        <button class="btn btn--secondary" id="saveDesignBtn" type="button">حفظ هذا التصميم</button>
-        <button class="btn btn--secondary" id="clearSavedBtn" type="button">حذف كل المحفوظات</button>
-      </div>
-    </section>
-    <section class="section" id="saved" aria-label="التصاميم المحفوظة">
-      <h2 class="section__title">تصاميمك المحفوظة</h2>
-      <p class="muted">أي تصميم تحفظينه يظهر هنا.</p>
-      <div id="savedList" class="saved-list"></div>
-    </section>
-    <footer class="footer" id="contact" aria-label="التواصل">
-      <div class="footer__inner">
-        <div>
-          <h2 class="footer__title">تواصل</h2>
-          <a class="footer__link" href="mailto:yourname@example.com">راسليني على البريد</a>
-          <p class="muted" style="margin-top:8px;">المطوّر: رتاج</p>
-        </div>
-
-        <div class="footer__cta">
-          <p class="muted">قل مرحباً!</p>
-          <button class="btn btn--secondary" id="visitBtn" type="button">لزيارة موقعي!</button>
-        </div>
-      </div>
-    </footer>
-
-  </main>
-
-  <script src="script.js?v=1"></script>
-</body>
-</html>
-
+    $("tool")?.scrollIntoView({ behavior: "smooth" });
+  }
+});
+(async function init() {
+  try {
+    await loadData();
+    renderSaved();
+  } catch (err) {
+    console.error(err);
+    alert("في مشكلة بتحميل البيانات (data.json). تأكدي إنه موجود في نفس مكان index.html");
+  }
+})();
