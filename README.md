@@ -14,8 +14,7 @@
 
 ## رابط الموقع (GitHub Pages)
 ضع الرابط هنا:
-- https://rtj4448-ux.github.io/room-style-picker/
-
+https://rtj4448-ux.github.io/room-style-picker/
 ## مميزات موجودة في المشروع
 - صفحة رئيسية (Landing Page) بتصميم مرتب
 - زر “لزيارة موقعي!” يعرض رسالة Alert
