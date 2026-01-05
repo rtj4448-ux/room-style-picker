@@ -1,0 +1,64 @@
+{
+  "styles": {
+    "modern": {
+      "name_ar": "مودرن",
+      "colors": ["#F8FAFC", "#111827", "#2563EB"],
+      "items": ["كنبة بخطوط بسيطة", "طاولة قهوة", "إضاءة أرضية", "لوحة جدارية"]
+    },
+    "minimal": {
+      "name_ar": "مينيمال",
+      "colors": ["#FFFFFF", "#E5E7EB", "#111827"],
+      "items": ["قطع قليلة", "خزانة تخزين", "مرآة", "ستارة خفيفة"]
+    },
+    "boho": {
+      "name_ar": "بوهو",
+      "colors": ["#F5EDE3", "#B45309", "#065F46"],
+      "items": ["سجاد بنقشة", "نباتات", "وسائد", "إكسسوارات خشبية"]
+    },
+    "classic": {
+      "name_ar": "كلاسيك",
+      "colors": ["#FFF7ED", "#7C2D12", "#1F2937"],
+      "items": ["ستارة ثقيلة", "طاولة جانبية", "لوحات", "إضاءة دافئة"]
+    }
+  },
+  "roomRules": {
+    "bedroom": {
+      "hint_ar": "غرفة النوم تحتاج هدوء وإضاءة ناعمة.",
+      "extraItems": ["طاولة جانبية", "إضاءة جانبية"]
+    },
+    "living": {
+      "hint_ar": "المعيشة تحتاج جلسة مريحة وتوزيع عملي.",
+      "extraItems": ["سجادة كبيرة", "طاولة قهوة"]
+    },
+    "office": {
+      "hint_ar": "المكتب يحتاج إضاءة وترتيب يقلل التشتت.",
+      "extraItems": ["مكتب عملي", "مصباح مكتب"]
+    }
+  },
+  "products": [
+    {
+      "id": "p1",
+      "title": "كنبة مودرن",
+      "style": "modern",
+      "price": 1499,
+      "image": "images/furniture.jpg",
+      "link": "https://example.com"
+    },
+    {
+      "id": "p2",
+      "title": "لوحة ألوان هادئة",
+      "style": "minimal",
+      "price": 199,
+      "image": "images/colors.jpg",
+      "link": "https://example.com"
+    },
+    {
+      "id": "p3",
+      "title": "سجادة بوهو",
+      "style": "boho",
+      "price": 399,
+      "image": "images/room-planner.jpg",
+      "link": "https://example.com"
+    }
+  ]
+}
