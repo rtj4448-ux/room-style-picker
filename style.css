@@ -23,9 +23,7 @@ body{
   line-height:1.7;
 }
 
-/* =========================
-   NAVBAR
-========================= */
+/* NAVBAR */
 .nav{
   position:sticky;
   top:0;
@@ -93,9 +91,7 @@ body{
   opacity:0.9;
 }
 
-/* =========================
-   LAYOUT
-========================= */
+/* LAYOUT */
 .container{
   width:min(var(--container), 92%);
   margin:0 auto;
@@ -113,9 +109,7 @@ body{
   margin:0 0 14px;
 }
 
-/* =========================
-   BUTTONS
-========================= */
+/* BUTTONS */
 .btn{
   border:0;
   border-radius:999px;
@@ -140,10 +134,7 @@ body{
 
 .btn--big{ padding:14px 26px; }
 
-/* =========================
-   HERO (header)
-   Background Image + Overlay
-========================= */
+/* HERO */
 .hero{
   position: relative;
   text-align:center;
@@ -160,7 +151,6 @@ body{
   box-shadow: var(--shadow);
 }
 
-/* طبقة شفافة عشان النص يوضح */
 .hero::before{
   content:"";
   position:absolute;
@@ -172,7 +162,6 @@ body{
   );
 }
 
-/* نخلي محتوى الهيرو فوق الطبقة */
 .hero > *{
   position: relative;
   z-index: 1;
@@ -191,9 +180,7 @@ body{
   font-size: 1.05rem;
 }
 
-/* =========================
-   CARDS (Features)
-========================= */
+/* CARDS */
 .cards{
   display:grid;
   grid-template-columns: repeat(4, 1fr);
@@ -233,40 +220,20 @@ body{
   font-size:0.95rem;
 }
 
-/* =========================
-   LOGIN BOX (Optional)
-========================= */
-.login__box{
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:18px;
-  background:#fff;
-  box-shadow: 0 8px 18px rgba(2,6,23,0.05);
-}
-
-/* =========================
-   FORMS
-========================= */
-.form label{
-  font-weight:900;
+/* الكروت صارت روابط */
+.card--link{
   display:block;
-  margin-top:10px;
-  margin-bottom:6px;
-  color: var(--text);
+  color: inherit;
+  text-decoration: none;
 }
 
-input, select{
-  width:100%;
-  padding:12px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background:#fff;
-  font-size:1rem;
+.card--link:focus{
+  outline: 3px solid rgba(37,99,235,0.35);
+  outline-offset: 4px;
+  border-radius: var(--radius);
 }
 
-/* =========================
-   TOOL
-========================= */
+/* TOOL */
 .tool__grid{
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -286,37 +253,7 @@ input, select{
   margin:8px 18px 0 0;
 }
 
-/* =========================
-   FOOTER
-========================= */
-.footer{
-  margin-top:40px;
-  border-top:1px solid var(--border);
-  padding-top:20px;
-}
-
-.footer__inner{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:18px;
-}
-.footer__title{ margin:0 0 8px; }
-.footer__link{
-  color:var(--primary);
-  font-weight:900;
-  text-decoration:none;
-}
-.footer__link:hover{ text-decoration:underline; }
-@media (max-width: 600px){
-  body{ background:#eef7ff; }      /* شرط المتطلبات */
-  .nav__links{ display:none; }
-  .hero{ padding: 70px 12px; }
-  .hero__title{ font-size: 30px; }
-  .cards{ grid-template-columns: 1fr; }
-  .tool__grid{ grid-template-columns: 1fr; }
-  .footer__inner{ flex-direction: column; }
-}
+/* SAVE BUTTONS */
 .tool-actions{
   display:flex;
   gap:12px;
@@ -324,6 +261,7 @@ input, select{
   flex-wrap:wrap;
 }
 
+/* SAVED LIST */
 .saved-list{
   display:grid;
   grid-template-columns: repeat(3, 1fr);
@@ -366,6 +304,37 @@ input, select{
   font-weight:800;
 }
 
+/* FOOTER */
+.footer{
+  margin-top:40px;
+  border-top:1px solid var(--border);
+  padding-top:20px;
+}
+
+.footer__inner{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:18px;
+}
+
+.footer__title{ margin:0 0 8px; }
+
+.footer__link{
+  color:var(--primary);
+  font-weight:900;
+  text-decoration:none;
+}
+.footer__link:hover{ text-decoration:underline; }
+
+/* REQUIRED: < 600px change background */
 @media (max-width: 600px){
+  body{ background:#eef7ff; }
+  .nav__links{ display:none; }
+  .hero{ padding: 70px 12px; }
+  .hero__title{ font-size: 30px; }
+  .cards{ grid-template-columns: 1fr; }
+  .tool__grid{ grid-template-columns: 1fr; }
   .saved-list{ grid-template-columns: 1fr; }
+  .footer__inner{ flex-direction: column; }
 }
