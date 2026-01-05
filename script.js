@@ -1,4 +1,6 @@
+// ====== Helpers ======
 const $ = (id) => document.getElementById(id);
+
 function colorDots(colors) {
   return colors
     .map(
@@ -24,16 +26,29 @@ function nowLabel() {
   const d = new Date();
   return d.toLocaleString("ar-SA");
 }
-const visitBtn = $("visitBtn");
-visitBtn?.addEventListener("click", () => {
+
+// ====== Required Alert Button ======
+$("visitBtn")?.addEventListener("click", () => {
   alert("شكراً لزيارة موقعي!");
 });
+
+// ====== Scroll buttons (Landing Page buttons) ======
 $("startBtn")?.addEventListener("click", () =>
   $("tool")?.scrollIntoView({ behavior: "smooth" })
 );
 $("heroBtn")?.addEventListener("click", () =>
   $("tool")?.scrollIntoView({ behavior: "smooth" })
 );
+
+// ====== Smooth scroll for buttons with data-scroll ======
+document.querySelectorAll("[data-scroll]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const target = btn.getAttribute("data-scroll");
+    document.querySelector(target)?.scrollIntoView({ behavior: "smooth" });
+  });
+});
+
+// ====== Data (from data.json) ======
 let DATA = null;
 
 async function loadData() {
@@ -61,6 +76,8 @@ function buildRecommendation(roomType, styleKey) {
     items
   };
 }
+
+// ====== General product links (Amazon / IKEA / Noon) ======
 function searchLink(site, query) {
   const q = encodeURIComponent(query);
 
@@ -74,6 +91,7 @@ function searchLink(site, query) {
 function productSearchLinks(styleKey, roomType) {
   const styleName = DATA.styles[styleKey].name_ar;
   const roomName = roomNameAr(roomType);
+
   const queries = [
     `${styleName} ${roomName} كنبة`,
     `${styleName} ${roomName} طاولة`,
@@ -115,6 +133,40 @@ function renderResult(rec, selections) {
     ${productsHtml}
   `;
 }
+
+// ====== Fill extra sections (Palette/Furniture/DIY) ======
+function fillExtraSections(rec, selections) {
+  // Palette
+  const paletteBox = $("paletteBox");
+  if (paletteBox) {
+    paletteBox.innerHTML = `
+      <strong>لوحة الألوان:</strong>
+      <div style="margin-top:10px;">${colorDots(rec.colors)}</div>
+    `;
+  }
+
+  // Links
+  const linksBox = $("linksBox");
+  if (linksBox) {
+    linksBox.innerHTML = productSearchLinks(selections.styleKey, selections.roomType);
+  }
+
+  // DIY ideas
+  const diyBox = $("diyBox");
+  if (diyBox) {
+    const styleName = DATA.styles[selections.styleKey]?.name_ar || "هذا الستايل";
+    diyBox.innerHTML = `
+      <strong>DIY أفكار سريعة (${styleName}):</strong>
+      <ul style="margin-top:10px;">
+        <li>غيّري الوسائد/البطانية بألوان من اللوحة.</li>
+        <li>أضيفي لوحة جدارية + إضاءة دافئة (لمبة أرضية أو أباجورة).</li>
+        <li>رتّبي زاوية نباتات صغيرة (طبيعية أو صناعية) للّمسات.</li>
+      </ul>
+    `;
+  }
+}
+
+// ====== Tool UI ======
 const roomTypeEl = $("roomType");
 const styleEl = $("style");
 const suggestBtn = $("suggestBtn");
@@ -135,9 +187,26 @@ suggestBtn?.addEventListener("click", () => {
   lastSelections = { roomType, styleKey };
 
   renderResult(rec, lastSelections);
+  fillExtraSections(rec, lastSelections);
 
   $("result")?.scrollIntoView({ behavior: "smooth", block: "start" });
 });
+
+// ====== Quick actions: buttons with data-quick ======
+document.querySelectorAll("[data-quick='true']").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const room = btn.getAttribute("data-room");
+    const style = btn.getAttribute("data-style");
+
+    if (roomTypeEl) roomTypeEl.value = room;
+    if (styleEl) styleEl.value = style;
+
+    suggestBtn?.click();
+    $("tool")?.scrollIntoView({ behavior: "smooth" });
+  });
+});
+
+// ====== Save Designs ======
 const saveDesignBtn = $("saveDesignBtn");
 const clearSavedBtn = $("clearSavedBtn");
 const savedList = $("savedList");
@@ -225,9 +294,13 @@ savedList?.addEventListener("click", (e) => {
     lastSelections = { roomType: item.roomType, styleKey: item.styleKey };
 
     renderResult(lastRecommendation, lastSelections);
+    fillExtraSections(lastRecommendation, lastSelections);
+
     $("tool")?.scrollIntoView({ behavior: "smooth" });
   }
 });
+
+// ====== Init ======
 (async function init() {
   try {
     await loadData();
