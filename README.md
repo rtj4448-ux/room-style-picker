@@ -22,5 +22,5 @@
 - Responsive Design + Media Query تحت 600px
 
 ## المطوّر
-- الاسم: رتاجي
-- تواصل: yourname@example.com
+- الاسم: رتاج علي الفيفي
+- تواصل: rtj4448@gmail.com
