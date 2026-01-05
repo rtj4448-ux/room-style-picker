@@ -1,4 +1,3 @@
-// ====== Helpers ======
 const $ = (id) => document.getElementById(id);
 
 function colorDots(colors) {
@@ -10,22 +9,18 @@ function colorDots(colors) {
     .join("");
 }
 
-function loadSaved() {
-  try {
-    return JSON.parse(localStorage.getItem("savedDesigns") || "[]");
-  } catch {
-    return [];
-  }
-}
-
-function saveAll(list) {
-  localStorage.setItem("savedDesigns", JSON.stringify(list));
-}
-
 function nowLabel() {
   const d = new Date();
   return d.toLocaleString("ar-SA");
 }
+
+function safeJsonParse(text, fallback) {
+  try { return JSON.parse(text); } catch { return fallback; }
+}
+
+// ====== LocalStorage keys ======
+const KEY_SAVED = "savedDesigns";
+const KEY_CART = "cartItems";
 
 // ====== Required Alert Button ======
 $("visitBtn")?.addEventListener("click", () => {
@@ -40,7 +35,7 @@ $("heroBtn")?.addEventListener("click", () =>
   $("tool")?.scrollIntoView({ behavior: "smooth" })
 );
 
-// ====== Smooth scroll for buttons with data-scroll ======
+// Smooth scroll for buttons with data-scroll
 document.querySelectorAll("[data-scroll]").forEach((btn) => {
   btn.addEventListener("click", () => {
     const target = btn.getAttribute("data-scroll");
@@ -52,7 +47,7 @@ document.querySelectorAll("[data-scroll]").forEach((btn) => {
 let DATA = null;
 
 async function loadData() {
-  const res = await fetch("./data.json?v=1");
+  const res = await fetch("./data.json?v=2");
   if (!res.ok) throw new Error("Failed to load data.json");
   DATA = await res.json();
 }
@@ -80,11 +75,9 @@ function buildRecommendation(roomType, styleKey) {
 // ====== General product links (Amazon / IKEA / Noon) ======
 function searchLink(site, query) {
   const q = encodeURIComponent(query);
-
   if (site === "amazon") return `https://www.amazon.sa/s?k=${q}`;
   if (site === "ikea") return `https://www.ikea.com/sa/ar/search/?q=${q}`;
   if (site === "noon") return `https://www.noon.com/saudi-ar/search?q=${q}`;
-
   return "#";
 }
 
@@ -100,16 +93,21 @@ function productSearchLinks(styleKey, roomType) {
 
   return `
     <div style="margin-top:12px;">
-      <strong>روابط منتجات (بحث عام):</strong>
+      <strong>روابط منتجات (بحث عام) + إضافة للسلة:</strong>
       <ul style="margin-top:8px;">
         ${queries
           .map(
             (q) => `
-          <li>
-            ${q}
-            — <a href="${searchLink("amazon", q)}" target="_blank" rel="noopener noreferrer">Amazon</a>
-            | <a href="${searchLink("ikea", q)}" target="_blank" rel="noopener noreferrer">IKEA</a>
-            | <a href="${searchLink("noon", q)}" target="_blank" rel="noopener noreferrer">Noon</a>
+          <li style="margin-bottom:10px;">
+            <div><strong>${q}</strong></div>
+            <div style="margin-top:6px;">
+              <a href="${searchLink("amazon", q)}" target="_blank" rel="noopener noreferrer">Amazon</a>
+              | <a href="${searchLink("ikea", q)}" target="_blank" rel="noopener noreferrer">IKEA</a>
+              | <a href="${searchLink("noon", q)}" target="_blank" rel="noopener noreferrer">Noon</a>
+            </div>
+            <div style="margin-top:8px;">
+              <button class="small-btn" data-addcart="1" data-query="${encodeURIComponent(q)}">أضف للسلة</button>
+            </div>
           </li>
         `
           )
@@ -119,6 +117,7 @@ function productSearchLinks(styleKey, roomType) {
   `;
 }
 
+// ====== Render main result ======
 function renderResult(rec, selections) {
   const result = $("result");
   if (!result) return;
@@ -151,7 +150,7 @@ function fillExtraSections(rec, selections) {
     linksBox.innerHTML = productSearchLinks(selections.styleKey, selections.roomType);
   }
 
-  // DIY ideas
+  // DIY
   const diyBox = $("diyBox");
   if (diyBox) {
     const styleName = DATA.styles[selections.styleKey]?.name_ar || "هذا الستايل";
@@ -159,8 +158,8 @@ function fillExtraSections(rec, selections) {
       <strong>DIY أفكار سريعة (${styleName}):</strong>
       <ul style="margin-top:10px;">
         <li>غيّري الوسائد/البطانية بألوان من اللوحة.</li>
-        <li>أضيفي لوحة جدارية + إضاءة دافئة (لمبة أرضية أو أباجورة).</li>
-        <li>رتّبي زاوية نباتات صغيرة (طبيعية أو صناعية) للّمسات.</li>
+        <li>أضيفي لوحة جدارية + إضاءة دافئة.</li>
+        <li>ركني نباتات صغيرة (أو صناعية) للّمسات.</li>
       </ul>
     `;
   }
@@ -192,7 +191,7 @@ suggestBtn?.addEventListener("click", () => {
   $("result")?.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
-// ====== Quick actions: buttons with data-quick ======
+// Quick actions
 document.querySelectorAll("[data-quick='true']").forEach((btn) => {
   btn.addEventListener("click", () => {
     const room = btn.getAttribute("data-room");
@@ -206,7 +205,14 @@ document.querySelectorAll("[data-quick='true']").forEach((btn) => {
   });
 });
 
-// ====== Save Designs ======
+// ====== Saved Designs ======
+function loadSaved() {
+  return safeJsonParse(localStorage.getItem(KEY_SAVED) || "[]", []);
+}
+function saveSaved(list) {
+  localStorage.setItem(KEY_SAVED, JSON.stringify(list));
+}
+
 const saveDesignBtn = $("saveDesignBtn");
 const clearSavedBtn = $("clearSavedBtn");
 const savedList = $("savedList");
@@ -224,18 +230,18 @@ function renderSaved() {
   savedList.innerHTML = saved
     .map(
       (d, idx) => `
-    <div class="saved-card">
-      <h3>${d.title}</h3>
-      <p class="meta">تم الحفظ: ${d.savedAt}</p>
-      <div>الألوان: ${colorDots(d.colors)}</div>
-      ${d.hint ? `<p class="meta" style="margin-top:10px;">${d.hint}</p>` : ""}
+      <div class="saved-card">
+        <h3>${d.title}</h3>
+        <p class="meta">تم الحفظ: ${d.savedAt}</p>
+        <div>الألوان: ${colorDots(d.colors)}</div>
+        ${d.hint ? `<p class="meta" style="margin-top:10px;">${d.hint}</p>` : ""}
 
-      <div class="actions">
-        <button class="small-btn" data-action="load" data-idx="${idx}">تطبيق</button>
-        <button class="small-btn" data-action="delete" data-idx="${idx}">حذف</button>
+        <div class="actions">
+          <button class="small-btn" data-action="load" data-idx="${idx}">تطبيق</button>
+          <button class="small-btn" data-action="delete" data-idx="${idx}">حذف</button>
+        </div>
       </div>
-    </div>
-  `
+    `
     )
     .join("");
 }
@@ -253,13 +259,13 @@ saveDesignBtn?.addEventListener("click", () => {
     savedAt: nowLabel()
   });
 
-  saveAll(saved.slice(0, 20));
+  saveSaved(saved.slice(0, 20));
   renderSaved();
   alert("تم حفظ التصميم ✅");
 });
 
 clearSavedBtn?.addEventListener("click", () => {
-  localStorage.removeItem("savedDesigns");
+  localStorage.removeItem(KEY_SAVED);
   renderSaved();
 });
 
@@ -276,7 +282,7 @@ savedList?.addEventListener("click", (e) => {
 
   if (action === "delete") {
     saved.splice(idx, 1);
-    saveAll(saved);
+    saveSaved(saved);
     renderSaved();
     return;
   }
@@ -300,11 +306,143 @@ savedList?.addEventListener("click", (e) => {
   }
 });
 
-// ====== Init ======
+// ====== Cart ======
+function loadCart() {
+  return safeJsonParse(localStorage.getItem(KEY_CART) || "[]", []);
+}
+function saveCart(list) {
+  localStorage.setItem(KEY_CART, JSON.stringify(list));
+}
+
+const cartListEl = $("cartList");
+const cartCountEl = $("cartCount");
+const clearCartBtn = $("clearCartBtn");
+
+function setCartCount() {
+  const cart = loadCart();
+  if (cartCountEl) cartCountEl.textContent = String(cart.length);
+}
+
+function renderCart() {
+  if (!cartListEl) return;
+
+  const cart = loadCart();
+  setCartCount();
+
+  if (cart.length === 0) {
+    cartListEl.innerHTML = `<div class="muted">السلة فاضية… ضيفي شيء من روابط المنتجات 👀</div>`;
+    return;
+  }
+
+  cartListEl.innerHTML = cart
+    .map((item, idx) => {
+      const q = item.query;
+      return `
+        <div class="cart-item">
+          <p class="cart-item__title">${q}</p>
+          <div class="cart-item__links">
+            <a href="${searchLink("amazon", q)}" target="_blank" rel="noopener noreferrer">Amazon</a>
+            | <a href="${searchLink("ikea", q)}" target="_blank" rel="noopener noreferrer">IKEA</a>
+            | <a href="${searchLink("noon", q)}" target="_blank" rel="noopener noreferrer">Noon</a>
+          </div>
+
+          <div class="cart-item__actions">
+            <button class="small-btn" data-removecart="1" data-idx="${idx}">حذف</button>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+}
+
+// Add to cart using event delegation
+document.addEventListener("click", (e) => {
+  const addBtn = e.target.closest("[data-addcart]");
+  if (!addBtn) return;
+
+  const encoded = addBtn.getAttribute("data-query") || "";
+  const query = decodeURIComponent(encoded);
+
+  const cart = loadCart();
+
+  // منع التكرار
+  const exists = cart.some((x) => x.query === query);
+  if (!exists) {
+    cart.unshift({ query, addedAt: nowLabel() });
+    saveCart(cart.slice(0, 50));
+    renderCart();
+    alert("تمت الإضافة للسلة ✅");
+  } else {
+    alert("هذا موجود بالسلة بالفعل 🙂");
+  }
+});
+
+document.addEventListener("click", (e) => {
+  const rmBtn = e.target.closest("[data-removecart]");
+  if (!rmBtn) return;
+
+  const idx = Number(rmBtn.getAttribute("data-idx"));
+  const cart = loadCart();
+  cart.splice(idx, 1);
+  saveCart(cart);
+  renderCart();
+});
+
+clearCartBtn?.addEventListener("click", () => {
+  localStorage.removeItem(KEY_CART);
+  renderCart();
+});
+
+// ====== Export / Import ======
+function downloadJson(filename, obj) {
+  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  URL.revokeObjectURL(url);
+}
+
+$("exportAllBtn")?.addEventListener("click", () => {
+  const payload = {
+    exportedAt: nowLabel(),
+    savedDesigns: loadSaved(),
+    cartItems: loadCart()
+  };
+  downloadJson("room-style-backup.json", payload);
+});
+
+$("importFile")?.addEventListener("change", async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const text = await file.text();
+  const data = safeJsonParse(text, null);
+
+  if (!data || typeof data !== "object") {
+    alert("الملف غير صالح.");
+    return;
+  }
+
+  if (Array.isArray(data.savedDesigns)) localStorage.setItem(KEY_SAVED, JSON.stringify(data.savedDesigns));
+  if (Array.isArray(data.cartItems)) localStorage.setItem(KEY_CART, JSON.stringify(data.cartItems));
+
+  renderSaved();
+  renderCart();
+
+  alert("تم الاستيراد ✅");
+  e.target.value = "";
+});
 (async function init() {
   try {
     await loadData();
     renderSaved();
+    renderCart();
   } catch (err) {
     console.error(err);
     alert("في مشكلة بتحميل البيانات (data.json). تأكدي إنه موجود في نفس مكان index.html");
