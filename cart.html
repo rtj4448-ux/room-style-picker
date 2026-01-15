@@ -1,62 +1,25 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>السلة | RoomStyle</title>
-  <link rel="stylesheet" href="style.css?v=2" />
+  <meta charset="UTF-8">
+  <title>RoomStyle | السلة</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <nav class="nav">
-    <div class="nav__inner">
-      <div class="brand">
-        <div class="brand__logo">R</div>
-        <span class="brand__name">RoomStyle</span>
-      </div>
 
-      <ul class="nav__links">
-        <li><a href="index.html">الرئيسية</a></li>
-        <li><a href="index.html#tool">الاقتراح</a></li>
-        <li><a href="index.html#saved">المحفوظات</a></li>
-        <li><a href="cart.html">السلة <span id="cartCount" class="badge">0</span></a></li>
-        <li><a href="projects.html">نسخ احتياطي</a></li>
-      </ul>
+<header class="header">
+  <h1>السلة</h1>
+  <p>التصاميم اللي حفظتيها</p>
+</header>
 
-      <div class="nav__actions">
-        <a class="nav__login" href="index.html#tool">Login</a>
-        <a class="btn btn--primary" href="index.html#tool">ابدأ الآن</a>
-      </div>
-    </div>
-  </nav>
+<main class="container" id="cartBox">
+</main>
 
-  <main class="container">
-    <section class="section">
-      <h1 class="section__title">السلة</h1>
-      <p class="muted">هنا تجمع روابط البحث التي أعجبتك عشان ترجع لها بسهولة.</p>
+<div class="actions">
+  <button onclick="clearCart()">تفريغ السلة</button>
+  <a href="index.html">رجوع للاختيار</a>
+</div>
 
-      <div class="row">
-        <button class="btn btn--secondary" id="clearCartBtn" type="button">تفريغ السلة</button>
-        <a class="btn btn--primary" href="index.html#tool">إضافة عناصر جديدة</a>
-      </div>
-
-      <div id="cartList" class="cart-list"></div>
-    </section>
-
-    <footer class="footer" style="margin-top:28px;">
-      <div class="footer__inner">
-        <div>
-          <h2 class="footer__title">ملاحظة</h2>
-          <p class="muted">السلة محفوظة على نفس الجهاز (LocalStorage).</p>
-        </div>
-
-        <div class="footer__cta">
-          <a class="btn btn--secondary" href="projects.html">اذهب للنسخ الاحتياطي</a>
-        </div>
-      </div>
-    </footer>
-  </main>
-
-  <script src="script.js?v=2"></script>
+<script src="script.js"></script>
 </body>
 </html>
