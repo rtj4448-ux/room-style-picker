@@ -1,6 +1,6 @@
 body {
   font-family: Arial;
-  background: #f5f7fa;
+  background: #f4f6f8;
   margin: 0;
   text-align: center;
 }
@@ -16,7 +16,7 @@ body {
   margin: 30px auto;
   background: white;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 label {
@@ -34,13 +34,9 @@ button {
   background: #2563eb;
   color: white;
   border: none;
-  border-radius: 6px;
-  margin-top: 20px;
+  border-radius: 8px;
   cursor: pointer;
-}
-
-button:hover {
-  background: #1e40af;
+  margin-top: 15px;
 }
 
 .card img {
@@ -56,5 +52,4 @@ button:hover {
 .actions a {
   display: block;
   margin-top: 10px;
-  color: #2563eb;
 }
