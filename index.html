@@ -2,45 +2,86 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>RoomStyle | اختيار التصميم</title>
+  <title>RoomStyle | تصميم داخلي</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="header">
-  <h1>اختاري تصميم غرفتك</h1>
-  <p>جاوبي الأسئلة وخلّي الموقع يقترح لك التصميم المناسب</p>
-  <a href="cart.html" class="cart-link">🛒 السلة</a>
+<!-- ===== HEADER ===== -->
+<header class="topbar">
+  <div class="logo">RoomStyle</div>
+  <nav>
+    <a href="#about">عن الموقع</a>
+    <a href="#services">الخدمات</a>
+    <a href="#reviews">الآراء</a>
+    <a href="#contact">تواصل</a>
+    <a class="login" href="#">تسجيل الدخول</a>
+  </nav>
 </header>
 
-<main class="container">
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-text">
+    <h1>صممي غرفتك بأسلوبك</h1>
+    <p>نقترح لك تصميم متكامل يناسب ذوقك وميزانيتك</p>
+    <a href="choose.html" class="btn-main">ابدئي التصميم</a>
+  </div>
+</section>
 
-  <label>نوع الغرفة</label>
-  <select id="roomType">
-    <option value="">-- اختاري --</option>
-    <option value="bedroom">غرفة نوم</option>
-    <option value="living">غرفة معيشة</option>
-  </select>
+<!-- ===== SERVICES ===== -->
+<section class="section" id="services">
+  <h2>اختاري غرفتك</h2>
+  <div class="cards">
 
-  <label>الأسلوب</label>
-  <select id="style">
-    <option value="">-- اختاري --</option>
-    <option value="modern">مودرن</option>
-    <option value="classic">كلاسيك</option>
-  </select>
+    <div class="service-card">
+      <img src="images/bedroom-modern.jpg">
+      <h3>غرف النوم</h3>
+      <p>تصاميم مريحة وعصرية</p>
+    </div>
 
-  <label>الميزانية</label>
-  <select id="budget">
-    <option value="">-- اختاري --</option>
-    <option value="low">منخفضة</option>
-    <option value="medium">متوسطة</option>
-    <option value="high">مرتفعة</option>
-  </select>
+    <div class="service-card">
+      <img src="images/living-modern.jpg">
+      <h3>غرف المعيشة</h3>
+      <p>أناقة وراحة لكل بيت</p>
+    </div>
 
-  <button onclick="goToResult()">اعرض التصميم</button>
+  </div>
+</section>
 
-</main>
+<!-- ===== ABOUT ===== -->
+<section class="section light" id="about">
+  <h2>من نحن</h2>
+  <p class="text">
+    RoomStyle منصة تساعدك على اختيار تصميم غرفتك بسهولة،
+    بناءً على ذوقك وميزانيتك، مع اقتراح ألوان وأثاث متناسق.
+  </p>
+</section>
 
-<script src="script.js"></script>
+<!-- ===== REVIEWS ===== -->
+<section class="section" id="reviews">
+  <h2>آراء العملاء</h2>
+  <div class="cards">
+
+    <div class="review">
+      ⭐⭐⭐⭐⭐
+      <p>الموقع ساعدني أختار تصميم غرفتي بسرعة!</p>
+    </div>
+
+    <div class="review">
+      ⭐⭐⭐⭐☆
+      <p>فكرة رائعة وسهلة الاستخدام.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<footer class="footer" id="contact">
+  <h2>تواصل معنا</h2>
+  <p>📧 roomstyle@email.com</p>
+  <p>📞 0555555555</p>
+  <p class="copy">© 2026 RoomStyle</p>
+</footer>
+
 </body>
 </html>
