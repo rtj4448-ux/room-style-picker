@@ -2,27 +2,23 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>التصميم المقترح</title>
+  <title>RoomStyle | النتيجة</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <nav class="nav">
-    <a href="index.html">⬅ رجوع للاختيار</a>
-    <a href="cart.html">السلة 🛒</a>
-  </nav>
 
-  <main class="container">
-    <h1 class="section__title">التصميم المقترح لك</h1>
+<header class="header">
+  <h1>التصميم المقترح</h1>
+</header>
 
-    <div id="resultBox" class="result-card"></div>
+<main class="container" id="resultBox"></main>
 
-    <button class="btn btn--primary" onclick="addResultToCart()">
-      أضف للسلة
-  <a href="cart.html">اذهب إلى السلة</a>
-    </button>
-  </main>
+<div class="actions">
+  <button onclick="addToCart()">أضف للسلة</button>
+  <button onclick="shareDesign()">مشاركة التصميم</button>
+  <a href="index.html">رجوع للاختيار</a>
+</div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
